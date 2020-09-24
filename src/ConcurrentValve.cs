@@ -7,8 +7,6 @@ using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
-    using Internal;
-
     public sealed class ConcurrentValve
     {
         [DefaultValue(Unknown)]

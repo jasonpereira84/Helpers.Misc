@@ -6,8 +6,6 @@ namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {
-        using Internal;
-
         public static partial class Misc
         {
             public static Boolean None<TSource>(this IEnumerable<TSource> source)
@@ -109,7 +107,7 @@ namespace JasonPereira84.Helpers
                 => Sanitize(source, set => predicate.Invoke(set.Value));
 
             public static IEnumerable<KeyValuePair<Int32, String>> Sanitize(this IEnumerable<KeyValuePair<Int32, String>> source)
-                => Sanitize(source, value => !Helpers.IsNullOrEmptyOrWhiteSpace(value));
+                => Sanitize(source, value => !_internalHelpers.IsNullOrEmptyOrWhiteSpace(value));
 
             #endregion IEnumerable<KeyValuePair<Int32, String>>
         }
