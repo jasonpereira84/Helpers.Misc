@@ -4,8 +4,6 @@ namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {
-        using Internal;
-
         public static partial class Misc
         {
             public static Boolean NotEquals<T>(this T value, T otherValue) 
