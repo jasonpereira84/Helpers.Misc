@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {
