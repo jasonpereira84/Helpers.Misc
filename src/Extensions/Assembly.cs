@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {

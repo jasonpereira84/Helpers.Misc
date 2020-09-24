@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     public static partial class Ensure
     {

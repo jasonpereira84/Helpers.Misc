@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     public interface IValue<TValue>
     {
