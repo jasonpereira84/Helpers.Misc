@@ -8,8 +8,6 @@ using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
-    using Internal;
-
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 

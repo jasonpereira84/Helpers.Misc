@@ -2,8 +2,6 @@
 
 namespace JasonPereira84.Helpers
 {
-    using Internal;
-
     public interface IPerson
     {
         String First { get; }
@@ -53,7 +51,7 @@ namespace JasonPereira84.Helpers
                 => new Func<String, String>(
                 (value) =>
                 {
-                    Helpers.EvaluateSanity(value, name, out String saneValue);
+                    _internalHelpers.EvaluateSanity(value, name, out String saneValue);
                     return saneValue;
                 });
 
