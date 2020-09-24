@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     using Pair = KeyValuePair<String, String>;
     using Dictionary = Dictionary<String, String>;

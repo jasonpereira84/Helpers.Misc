@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {

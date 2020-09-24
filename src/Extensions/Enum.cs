@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {
