@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     public static partial class Do
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {

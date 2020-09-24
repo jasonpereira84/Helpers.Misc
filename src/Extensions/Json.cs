@@ -6,7 +6,7 @@ using System.Collections;
 using System.Globalization;
 using System.Collections.Generic;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     using Internal;
 

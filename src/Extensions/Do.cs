@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace TeamHealth.Helpers
+namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {
-        using static TeamHealth.Helpers.Do;
+        using static JasonPereira84.Helpers.Do;
 
         public static partial class Misc
         {
