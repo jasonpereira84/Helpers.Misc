@@ -35,9 +35,12 @@ namespace JasonPereira84.Helpers
                 => value.NotEquals(Decimal.MinValue);
 
             public static Decimal ToDecimal(this Boolean value)
-                => value
+                => !value
                     ? Decimal.MinValue
                     : Decimal.MaxValue;
+
+            public static Boolean IsNegative(this Decimal value) => value < 0m;
+            public static Boolean IsNotNegative(this Decimal value) => value >= 0m;
 
             #region Nullable
             public static Boolean HasValue(this Nullable<Decimal> value)
