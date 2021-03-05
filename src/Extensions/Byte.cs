@@ -35,7 +35,7 @@ namespace JasonPereira84.Helpers
                 => value.NotEquals(Byte.MinValue);
 
             public static Byte ToByte(this Boolean value)
-                => value
+                => !value
                     ? Byte.MinValue
                     : Byte.MaxValue;
 

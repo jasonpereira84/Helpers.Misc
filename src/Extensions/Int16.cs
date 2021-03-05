@@ -35,9 +35,15 @@ namespace JasonPereira84.Helpers
                 => value.GreaterThan(0);
 
             public static Int16 ToInt16(this Boolean value)
-                => value
+                => !value
                     ? Int16.MinValue
                     : Int16.MaxValue;
+
+            public static Boolean EqualsZero(this Int16 value) => value == 0;
+            public static Boolean NotEqualsZero(this Int16 value) => value != 0;
+
+            public static Boolean IsNegative(this Int16 value) => value < 0;
+            public static Boolean IsNotNegative(this Int16 value) => value >= 0;
 
             #region Nullable
             public static Boolean HasValue(this Nullable<Int16> value)

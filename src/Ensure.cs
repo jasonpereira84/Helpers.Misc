@@ -12,9 +12,12 @@ namespace JasonPereira84.Helpers
         public static void That<TException>(Boolean predicate)
             where TException : Exception 
             => _that(predicate, () => (TException)Activator.CreateInstance(typeof(TException)));
+        public static void That<TException>(Boolean predicate, Object[] args)
+            where TException : Exception
+            => _that(predicate, () => (TException)Activator.CreateInstance(typeof(TException), args ?? new Object[0]));
         public static void That<TException>(Boolean predicate, String message)
             where TException : Exception
-            => _that(predicate, () => (TException)Activator.CreateInstance(typeof(TException), new Object[] { message ?? "NULL message" }));
+            => That<TException>(predicate, new Object[] { message ?? "NULL message" });
 
         public static void That(Boolean predicate) => That<Exception>(predicate);
         public static void That(Boolean predicate, String message) => That<Exception>(predicate, message);
