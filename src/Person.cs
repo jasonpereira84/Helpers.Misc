@@ -14,14 +14,6 @@ namespace JasonPereira84.Helpers
         public String First { get; set; } = default(String);
 
         public String Last { get; set; } = default(String);
-
-        public static Person From<TPerson>(TPerson person)
-            where TPerson : IPerson
-            => new Person
-            {
-                Last = person.Last,
-                First = person.First
-            };
     }
 
     public sealed class SanePerson : IPerson
@@ -30,37 +22,29 @@ namespace JasonPereira84.Helpers
 
         public String First { get; private set; }
 
-        private SanePerson() { }
-
-        public static SanePerson From<TPerson>(TPerson person, Func<String, String> sanitizerLAST, Func<String, String> sanitizerFIRST)
-            where TPerson : IPerson
-            => new SanePerson
-            {
-                Last = sanitizerLAST.Invoke(person.Last),
-                First = sanitizerFIRST.Invoke(person.First)
-            };
-
-        public static SanePerson From<TPerson>(TPerson person, Func<String, String> sanitizer)
-            where TPerson : IPerson
-            => From(person, sanitizer, sanitizer);
-
-        public static SanePerson From<TPerson>(TPerson person)
-            where TPerson : IPerson
+        private SanePerson(String last, String first) 
         {
-            Func<String, String> _sanitizer(String name)
-                => new Func<String, String>(
-                (value) =>
-                {
-                    _internalHelpers.EvaluateSanity(value, name, out String saneValue);
-                    return saneValue;
-                });
-
-            return From(person, _sanitizer(nameof(IPerson.Last)), _sanitizer(nameof(IPerson.First)));
+            Last = last;
+            First = first;
         }
 
-        public String Fullname(String format)
-            => format
-                .Replace($"{{{nameof(Last)}}}", Last)
-                .Replace($"{{{nameof(First)}}}", First);
+        public static SanePerson From(IPerson person, Func<String, String> sanitizerLAST, Func<String, String> sanitizerFIRST)
+            => new SanePerson(sanitizerLAST.Invoke(person.Last), sanitizerFIRST.Invoke(person.First));
+
+        public static SanePerson From(IPerson person, Func<String, String> sanitizer)
+            => From(person, sanitizer, sanitizer);
+
+        public static SanePerson From(IPerson person)
+        {
+            String _sanitize(String name, String value)
+            {
+                _internalHelpers.EvaluateSanity(value, name, out String saneValue);
+                return saneValue;
+            }
+
+            return From(person,
+                sanitizerLAST: v => _sanitize(nameof(IPerson.Last), v), 
+                sanitizerFIRST: v => _sanitize(nameof(IPerson.First), v));
+        }
     }
 }
