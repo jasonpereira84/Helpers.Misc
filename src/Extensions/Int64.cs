@@ -39,6 +39,9 @@ namespace JasonPereira84.Helpers
                     ? Int64.MinValue
                     : Int64.MaxValue;
 
+            public static Boolean IsNegative(this Int64 value) => value < 0;
+            public static Boolean IsNotNegative(this Int64 value) => value >= 0;
+
             #region Nullable
             public static Boolean HasValue(this Nullable<Int64> value)
                 => value.HasValue;

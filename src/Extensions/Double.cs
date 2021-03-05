@@ -35,9 +35,12 @@ namespace JasonPereira84.Helpers
                 => value.NotEquals(Double.MinValue);
 
             public static Double ToDouble(this Boolean value)
-                => value
+                => !value
                     ? Double.MinValue
                     : Double.MaxValue;
+
+            public static Boolean IsNegative(this Double value) => value < 0.0;
+            public static Boolean IsNotNegative(this Double value) => value >= 0.0;
 
             #region Nullable
             public static Boolean HasValue(this Nullable<Double> value)
