@@ -41,6 +41,30 @@ namespace JasonPereira84.Helpers
             public static Boolean NotContains<TSource>(this IEnumerable<TSource> source, TSource value)
                 => !source.Contains(value);
 
+            public static Boolean ContainsAny<TSource>(this IEnumerable<TSource> source, IEnumerable<TSource> values)
+            {
+                if (source.None())
+                    return false;
+
+                foreach (var value in values)
+                    if (source.Contains(value))
+                        return true;
+
+                return false;
+            }
+
+            public static Boolean ContainsAll<TSource>(this IEnumerable<TSource> source, IEnumerable<TSource> values)
+            {
+                if (source.None())
+                    return false;
+
+                foreach (var value in values)
+                    if (source.NotContains(value))
+                        return false;
+
+                return true;
+            }
+
             public static Boolean IsOneOf<TSource>(this TSource value, params TSource[] source)
                 => source.Contains(value);
 
