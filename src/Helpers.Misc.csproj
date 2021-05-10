@@ -20,7 +20,7 @@
     <PackageDescription>Misc. helper methods, properties, objects etc.</PackageDescription>
     <PackageTags>C#, Library, Utils, Helpers, Misc</PackageTags>
     <Authors>jasonpereira84@gmail.com</Authors>
-    <Version>2.0.5</Version>
+    <Version>2.0.6</Version>
 
   </PropertyGroup>
 

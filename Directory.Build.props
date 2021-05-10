@@ -5,8 +5,8 @@
     <Product>Helpers.Misc</Product>
     <Copyright>Copyright © 2019</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.0.5.0</AssemblyVersion>
-    <InformationalVersion>2.0.5.0</InformationalVersion>
+    <AssemblyVersion>2.0.6.0</AssemblyVersion>
+    <InformationalVersion>2.0.6.0</InformationalVersion>
   </PropertyGroup>
 
 </Project>
