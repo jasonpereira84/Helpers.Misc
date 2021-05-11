@@ -29,19 +29,19 @@ namespace JasonPereira84.Helpers
         public String GIT_BRANCH
         {
             get => _dictionary["GIT_BRANCH"];
-            set => _dictionary["GIT_BRANCH"] = Extensions.Misc.SanitizeTo(value, "Unknown");
+            set => _dictionary["GIT_BRANCH"] = _internalHelpers.SanitizeTo(value, "Unknown");
         }
 
         public String GIT_COMMIT
         {
             get => _dictionary["GIT_COMMIT"];
-            set => _dictionary["GIT_COMMIT"] = Extensions.Misc.SanitizeTo(value, "Unknown");
+            set => _dictionary["GIT_COMMIT"] = _internalHelpers.SanitizeTo(value, "Unknown");
         }
 
         public String BUILD_CONFIGURATION
         {
             get => _dictionary["BUILD_CONFIGURATION"];
-            set => _dictionary["BUILD_CONFIGURATION"] = Extensions.Misc.SanitizeTo(value, "Unknown");
+            set => _dictionary["BUILD_CONFIGURATION"] = _internalHelpers.SanitizeTo(value, "Unknown");
         }
 
         public IEnumerator<Pair> GetEnumerator()
