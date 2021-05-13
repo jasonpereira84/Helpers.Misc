@@ -20,28 +20,28 @@ namespace JasonPereira84.Helpers
         public CompilationProperties()
             : this(
                   new Dictionary {
-                      { "GIT_BRANCH", "Unknown" },
-                      { "GIT_COMMIT", "Unknown" },
-                      { "BUILD_CONFIGURATION", "Unknown" }
+                      { Constants.GitBranch, "Unknown" },
+                      { Constants.GitCommit, "Unknown" },
+                      { Constants.BuildConfiguration, "Unknown" }
                   })
         { }
 
         public String GIT_BRANCH
         {
-            get => _dictionary["GIT_BRANCH"];
-            set => _dictionary["GIT_BRANCH"] = _internalHelpers.SanitizeTo(value, "Unknown");
+            get => _dictionary[Constants.GitBranch];
+            set => _dictionary[Constants.GitBranch] = _internalHelpers.SanitizeTo(value, "Unknown");
         }
 
         public String GIT_COMMIT
         {
-            get => _dictionary["GIT_COMMIT"];
-            set => _dictionary["GIT_COMMIT"] = _internalHelpers.SanitizeTo(value, "Unknown");
+            get => _dictionary[Constants.GitCommit];
+            set => _dictionary[Constants.GitCommit] = _internalHelpers.SanitizeTo(value, "Unknown");
         }
 
         public String BUILD_CONFIGURATION
         {
-            get => _dictionary["BUILD_CONFIGURATION"];
-            set => _dictionary["BUILD_CONFIGURATION"] = _internalHelpers.SanitizeTo(value, "Unknown");
+            get => _dictionary[Constants.BuildConfiguration];
+            set => _dictionary[Constants.BuildConfiguration] = _internalHelpers.SanitizeTo(value, "Unknown");
         }
 
         public IEnumerator<Pair> GetEnumerator()
