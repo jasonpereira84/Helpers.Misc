@@ -44,20 +44,6 @@ namespace JasonPereira84.Helpers
 
             public static UInt16 ToUInt16(this Double value, Double maxValue = Double.MaxValue, UInt16 minValue = UInt16.MinValue)
                 => Convert.ToUInt16(Math.Min(Math.Max(value, (double)minValue), maxValue));
-
-            #region Nullable
-            public static Boolean HasValue(this Nullable<UInt16> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<UInt16> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<UInt16> value, UInt16 otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<UInt16> value, UInt16 otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }

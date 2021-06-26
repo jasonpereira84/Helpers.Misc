@@ -41,20 +41,6 @@ namespace JasonPereira84.Helpers
 
             public static Boolean IsNegative(this Decimal value) => value < 0m;
             public static Boolean IsNotNegative(this Decimal value) => value >= 0m;
-
-            #region Nullable
-            public static Boolean HasValue(this Nullable<Decimal> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<Decimal> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<Decimal> value, Decimal otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<Decimal> value, Decimal otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }

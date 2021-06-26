@@ -169,6 +169,7 @@ namespace JasonPereira84.Helpers
 
             public static Dictionary<TKey, TValueResult> AsDictionary<TValueSource, TKey, TValueResult>(this IDictionary<TKey, TValueSource> dictionary, Func<TKey, TValueSource, TValueResult> selector, out Dictionary<TKey, TValueResult> sink)
                 => sink = AsDictionary(dictionary, selector);
+
             #region IDictionary<String, X>
 
             public static Boolean ReallyTryGetValueOrDefault<TValue, TDictionary>(this TDictionary dictionary, String key, TValue defaultValue, out TValue value)
@@ -184,7 +185,8 @@ namespace JasonPereira84.Helpers
 
                 return false;
             }
-            #endregion
+
+            #endregion IDictionary<String, X>
         }
     }
 }

@@ -7,23 +7,23 @@ namespace JasonPereira84.Helpers
         public static Boolean IsNull(this String value)
             => value == null;
 
-        public static Boolean IsEmpty(this String nonNullString)
-            => nonNullString.Length.Equals(0);
+        public static Boolean IsEmpty(this String value)
+            => value?.Length.Equals(0) ?? false;
 
-        public static Boolean IsWhiteSpace(this String nonNullString)
-            => nonNullString.Trim().Length.Equals(0);
+        public static Boolean IsWhiteSpace(this String value)
+            => !value.IsEmpty() && (value?.Trim().Length.Equals(0) ?? false);
 
         public static Boolean IsNullOrEmpty(this String value)
             => value.IsNull() || value.IsEmpty();
 
-        public static Boolean IsEmptyOrWhiteSpace(this String nonNullString)
-            => nonNullString.IsEmpty() || nonNullString.IsWhiteSpace();
+        public static Boolean IsEmptyOrWhiteSpace(this String value)
+            => value.IsEmpty() || value.IsWhiteSpace();
 
         public static Boolean IsNullOrEmptyOrWhiteSpace(this String value)
             => String.IsNullOrWhiteSpace(value);
 
         public static (Boolean IsSane, String Value) EvaluateSanity(this String value,
-            String valueIfNull, String valueIfEmpty, String valueIfWhitespace, Boolean dontTrim = false)
+            String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
             => IsNull(value)
                 ? (false, valueIfNull)
                 : IsEmpty(value)
@@ -32,13 +32,9 @@ namespace JasonPereira84.Helpers
                         ? (false, valueIfWhitespace)
                         : (true, dontTrim ? value : value.Trim());
         public static (Boolean IsSane, String Value) EvaluateSanity(this String value,
-            String valueIfNull, String valueIfEmpty, String valueIfWhitespace, out (Boolean IsSane, String Value) result, Boolean dontTrim = false)
+            out (Boolean IsSane, String Value) result,
+            String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
             => result = EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
-
-        public static (Boolean IsSane, String Value) EvaluateSanity(this String value, Boolean dontTrim = false)
-            => EvaluateSanity(value, "NULL", "EMPTY", "WHITESPACE", dontTrim);
-        public static (Boolean IsSane, String Value) EvaluateSanity(this String value, out (Boolean IsSane, String Value) result, Boolean dontTrim = false)
-            => result = EvaluateSanity(value, dontTrim);
 
         public static Boolean EvaluateSanity(this String value, String name, out String saneValue, Boolean dontTrim = false)
         {
@@ -47,9 +43,6 @@ namespace JasonPereira84.Helpers
             return result.IsSane;
         }
 
-        public static String SanitizeTo(this String value, String valueIfNull, String valueIfEmpty, String valueIfWhitespace, Boolean dontTrim = false)
-            => EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim).Value;
-
         public static String SanitizeTo(this String value, String valueIfNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
             => String.IsNullOrWhiteSpace(value)
                 ? valueIfNullOrEmptyOrWhiteSpace
@@ -57,6 +50,12 @@ namespace JasonPereira84.Helpers
                     ? value
                     : value.Trim();
 
-        public static String Sanitize(this String value, Boolean dontTrim = false) => value.SanitizeTo(String.Empty, dontTrim);
+        public static String Sanitize(this String value, 
+            String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+            => EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim).Value;
+        public static String Sanitize(this String value, String name,
+            String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+            => EvaluateSanity(value, $"{valueIfNull}-{name}", $"{valueIfEmpty}-{name}", $"{valueIfWhitespace}-{name}", dontTrim).Value;
+
     }
 }
