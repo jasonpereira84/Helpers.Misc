@@ -9,16 +9,16 @@ namespace JasonPereira84.Helpers
         public static partial class Misc
         {
             public static Boolean None<TSource>(this IEnumerable<TSource> source)
-                => !source.Any();
+                => _internalHelpers.None(source);
 
             public static Boolean None<TSource>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate)
-                => !source.Any(predicate);
+                => _internalHelpers.None(source, predicate);
 
             public static Boolean IsNullOrNone<TSource>(this IEnumerable<TSource> source)
-                => (source == null) || !source.Any();
+                => _internalHelpers.IsNullOrNone(source);
 
             public static Boolean IsNullOrNone<TSource>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate)
-                => (source == null) || !source.Any(predicate);
+                => _internalHelpers.IsNullOrNone(source, predicate);
 
             public static Boolean IsNotNullOrNone<TSource>(this IEnumerable<TSource> source)
                 => !IsNullOrNone(source);

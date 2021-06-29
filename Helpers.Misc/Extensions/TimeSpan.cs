@@ -38,22 +38,26 @@ namespace JasonPereira84.Helpers
             public static String AsWords(this TimeSpan timeSpan,
                 String format_Days = null,
                 String format_Hours = null,
-                String format_Minutes = null)
+                String format_Minutes = null,
+                String format_Seconds = null)
             {
                 var dF = format_Days.SanitizeTo("{0} days");
                 var hF = format_Hours.SanitizeTo("{0} hours");
                 var mF = format_Minutes.SanitizeTo("{0} minutes");
+                var sF = format_Seconds.SanitizeTo("{0} seconds");
 
-                String str(Int32 d, Int32 h, Int32 m)
+                String str(Int32 d, Int32 h, Int32 m, Int32 s)
                 {
                     return d.GreaterThan(0)
-                      ? $"{String.Format(dF, d)} {str(0, h, m)}"
+                      ? $"{String.Format(dF, d)} {str(0, h, m, s)}"
                       : h.GreaterThan(0)
-                          ? $"{String.Format(hF, h)} {str(0, 0, m)}"
-                          : m.LessThan(1) ? "" : String.Format(mF, m);
+                          ? $"{String.Format(hF, h)} {str(0, 0, m, s)}"
+                          : m.GreaterThan(0)
+                              ? $"{String.Format(mF, m)} {str(0, 0, 0, s)}"
+                              : String.Format(sF, s);
                 }
 
-                return str(timeSpan.Days, timeSpan.Hours, timeSpan.Minutes);
+                return str(timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
             }
 
             #region Nullable

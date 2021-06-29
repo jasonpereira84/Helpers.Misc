@@ -41,20 +41,6 @@ namespace JasonPereira84.Helpers
 
             public static Boolean IsNegative(this SByte value) => value < 0;
             public static Boolean IsNotNegative(this SByte value) => value >= 0;
-
-            #region Nullable
-            public static Boolean HasValue(this Nullable<SByte> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<SByte> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<SByte> value, SByte otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<SByte> value, SByte otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }

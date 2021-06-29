@@ -44,21 +44,6 @@ namespace JasonPereira84.Helpers
 
             public static UInt32 ToUInt32(this Double value, Double maxValue = Double.MaxValue, UInt32 minValue = UInt32.MinValue)
                 => Convert.ToUInt32(Math.Min(Math.Max(value, (double)minValue), maxValue));
-
-            #region Nullable
-
-            public static Boolean HasValue(this Nullable<UInt32> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<UInt32> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<UInt32> value, UInt32 otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<UInt32> value, UInt32 otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }
