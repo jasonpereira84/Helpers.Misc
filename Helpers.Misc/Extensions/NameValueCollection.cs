@@ -9,9 +9,9 @@ namespace JasonPereira84.Helpers
     {
         public static partial class Misc
         {
-            public static IEnumerable<KeyValuePair<String, String>> ToPairs(this NameValueCollection collection)
+            public static IEnumerable<KeyValuePair<String, String>> ToPairs(this NameValueCollection nameValueCollection)
             {
-                Ensure.Argument.IsNotNull(collection, nameof(collection));
+                var collection = nameValueCollection ?? throw new ArgumentNullException(nameof(nameValueCollection));
                 return collection.Cast<String>().Select(key => new KeyValuePair<String, String>(key, collection[key]));
             }
         }

@@ -10,44 +10,41 @@ namespace JasonPereira84.Helpers
             public static Boolean IsNull(this String value) => _internalHelpers.IsNull(value);
             public static Boolean IsNotNull(this String value) => !_internalHelpers.IsNull(value);
 
-            public static Boolean IsEmpty(this String nonNullString) => _internalHelpers.IsEmpty(nonNullString);
-            public static Boolean IsNotEmpty(this String nonNullString) => !_internalHelpers.IsEmpty(nonNullString);
+            public static Boolean IsEmpty(this String value) => _internalHelpers.IsEmpty(value);
+            public static Boolean IsNotEmpty(this String value) => !_internalHelpers.IsEmpty(value);
 
-            public static Boolean IsWhiteSpace(this String nonNullString) => _internalHelpers.IsWhiteSpace(nonNullString);
-            public static Boolean IsNotWhiteSpace(this String nonNullString) => !_internalHelpers.IsWhiteSpace(nonNullString);
+            public static Boolean IsWhiteSpace(this String value) => _internalHelpers.IsWhiteSpace(value);
+            public static Boolean IsNotWhiteSpace(this String value) => !_internalHelpers.IsWhiteSpace(value);
 
             public static Boolean IsNullOrEmpty(this String value) => _internalHelpers.IsNullOrEmpty(value);
             public static Boolean IsNotNullOrEmpty(this String value) => !_internalHelpers.IsNullOrEmpty(value);
 
-            public static Boolean IsEmptyOrWhiteSpace(this String nonNullString) => _internalHelpers.IsEmptyOrWhiteSpace(nonNullString);
-            public static Boolean IsNotEmptyOrWhiteSpace(this String nonNullString) => !_internalHelpers.IsEmptyOrWhiteSpace(nonNullString);
+            public static Boolean IsEmptyOrWhiteSpace(this String value) => _internalHelpers.IsEmptyOrWhiteSpace(value);
+            public static Boolean IsNotEmptyOrWhiteSpace(this String value) => !_internalHelpers.IsEmptyOrWhiteSpace(value);
 
             public static Boolean IsNullOrEmptyOrWhiteSpace(this String value) => _internalHelpers.IsNullOrEmptyOrWhiteSpace(value);
             public static Boolean IsNotNullOrEmptyOrWhiteSpace(this String value) => !_internalHelpers.IsNullOrEmptyOrWhiteSpace(value);
 
-            public static (Boolean IsSane, String Value) EvaluateSanity(this String value, String valueIfNull, String valueIfEmpty, String valueIfWhitespace, Boolean dontTrim = false)
+            public static (Boolean IsSane, String Value) EvaluateSanity(this String value, 
+                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
                 => _internalHelpers.EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
-            public static (Boolean IsSane, String Value) EvaluateSanity(this String value, Boolean dontTrim = false)
-                => _internalHelpers.EvaluateSanity(value, dontTrim);
+            public static (Boolean IsSane, String Value) EvaluateSanity(this String value,
+                out (Boolean IsSane, String Value) result,
+                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+                => _internalHelpers.EvaluateSanity(value, out result, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
 
-            public static Boolean EvaluateSanity(this String value, out String saneValue, Boolean dontTrim = false)
-            {
-                var result = value.EvaluateSanity(dontTrim);
-                saneValue = result.Value;
-                return result.IsSane;
-            }
-            public static Boolean Sanitized(this String value, String name, out String saneValue, Boolean dontTrim = false)
+            public static Boolean EvaluateSanity(this String value, String name, out String saneValue, Boolean dontTrim = false)
                 => _internalHelpers.EvaluateSanity(value, name, out saneValue, dontTrim);
-            public static String Sanitized(this String value, String name, Boolean dontTrim = false)
-            {
-                _internalHelpers.EvaluateSanity(value, name, out String saneValue, dontTrim);
-                return saneValue;
-            }
 
-            public static String SanitizeTo(this String value, String valueIfNull, String valueIfEmpty, String valueIfWhitespace, Boolean dontTrim = false) => _internalHelpers.SanitizeTo(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
-            public static String SanitizeTo(this String value, String valueIfNullOrEmptyOrWhiteSpace, Boolean dontTrim = false) => _internalHelpers.SanitizeTo(value, valueIfNullOrEmptyOrWhiteSpace, dontTrim);
-            public static String Sanitize(this String value, Boolean dontTrim = false) => _internalHelpers.Sanitize(value, dontTrim);
-            public static String SanitizeTo(this String value, Func<String> func, Boolean dontTrim = false) => String.IsNullOrWhiteSpace(value) ? func.Invoke() : dontTrim ? value : value.Trim();
+            public static String SanitizeTo(this String value, String valueIfNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
+                => _internalHelpers.SanitizeTo(value, valueIfNullOrEmptyOrWhiteSpace, dontTrim);
+
+            public static String Sanitize(this String value,
+                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+                => _internalHelpers.Sanitize(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
+            public static String Sanitize(this String value, String name,
+                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+                => _internalHelpers.Sanitize(value, $"{valueIfNull}-{name}", $"{valueIfEmpty}-{name}", $"{valueIfWhitespace}-{name}", dontTrim);
 
 
             public static Boolean Matches(this String value, String otherValue) => value.Equals(otherValue, StringComparison.OrdinalIgnoreCase);
@@ -86,15 +83,15 @@ namespace JasonPereira84.Helpers
                     actionIfTrue.Invoke();
             }
 
-            public static void IfEmpty(this String nonNullString, Action actionIfTrue)
+            public static void IfEmpty(this String value, Action actionIfTrue)
             {
-                if (_internalHelpers.IsEmpty(nonNullString))
+                if (_internalHelpers.IsEmpty(value))
                     actionIfTrue.Invoke();
             }
 
-            public static void IfWhiteSpace(this String nonNullString, Action actionIfTrue)
+            public static void IfWhiteSpace(this String value, Action actionIfTrue)
             {
-                if (_internalHelpers.IsWhiteSpace(nonNullString))
+                if (_internalHelpers.IsWhiteSpace(value))
                     actionIfTrue.Invoke();
             }
 
@@ -104,9 +101,9 @@ namespace JasonPereira84.Helpers
                     actionIfTrue.Invoke();
             }
 
-            public static void IfEmptyOrWhiteSpace(this String nonNullString, Action actionIfTrue)
+            public static void IfEmptyOrWhiteSpace(this String value, Action actionIfTrue)
             {
-                if (_internalHelpers.IsEmptyOrWhiteSpace(nonNullString))
+                if (_internalHelpers.IsEmptyOrWhiteSpace(value))
                     actionIfTrue.Invoke();
             }
 

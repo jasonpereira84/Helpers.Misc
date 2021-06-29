@@ -41,20 +41,6 @@ namespace JasonPereira84.Helpers
 
             public static Boolean IsNegative(this Double value) => value < 0.0;
             public static Boolean IsNotNegative(this Double value) => value >= 0.0;
-
-            #region Nullable
-            public static Boolean HasValue(this Nullable<Double> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<Double> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<Double> value, Double otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<Double> value, Double otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }

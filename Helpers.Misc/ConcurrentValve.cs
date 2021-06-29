@@ -20,26 +20,25 @@ namespace JasonPereira84.Helpers
         private readonly ReaderWriterLock _padlock = new ReaderWriterLock();
 
         private StatesEnum _state;
-        private DateTimeOffset _toggledAt;
+        private DateTimeOffset _modifiedOn;
 
         public ConcurrentValve(StatesEnum initialState)
         {
             _state = initialState;
-            _toggledAt = DateTimeOffset.Now;
+            _modifiedOn = DateTimeOffset.Now;
         }
 
-        public Nullable<(StatesEnum State, DateTimeOffset ToggledAt)> Set(StatesEnum state, TimeSpan timeout, Action<ApplicationException> onTimeout, Action<Exception> onException)
+        public Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)> Set(StatesEnum state, TimeSpan timeout, Action<ApplicationException> onTimeout)
         {
-            var retVal = default(Nullable<(StatesEnum State, DateTimeOffset ToggledAt)>);
+            var retVal = default(Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)>);
             try
             {
                 _padlock.AcquireWriterLock(timeout);
                 _state = state;
-                _toggledAt = DateTimeOffset.Now;
-                retVal = (State: _state, ToggledAt: _toggledAt);
+                _modifiedOn = DateTimeOffset.Now;
+                retVal = (State: _state, ModifiedOn: _modifiedOn);
             }
             catch (ApplicationException x) when (onTimeout != null) { onTimeout.Invoke(x); }
-            catch (Exception x) when (onException != null) { onException.Invoke(x); }
             finally
             {
                 if (_padlock.IsWriterLockHeld)
@@ -48,16 +47,15 @@ namespace JasonPereira84.Helpers
             return retVal;
         }
 
-        public Nullable<(StatesEnum State, DateTimeOffset ToggledAt)> Get(TimeSpan timeout, Action<ApplicationException> onTimeout, Action<Exception> onException)
+        public Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)> Get(TimeSpan timeout, Action<ApplicationException> onTimeout)
         {
-            var retVal = default(Nullable<(StatesEnum State, DateTimeOffset ToggledAt)>);
+            var retVal = default(Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)>);
             try
             {
                 _padlock.AcquireReaderLock(timeout);
-                retVal = (State: _state, ToggledAt: _toggledAt);
+                retVal = (State: _state, ModifiedOn: _modifiedOn);
             }
             catch (ApplicationException x) when (onTimeout != null) { onTimeout.Invoke(x); }
-            catch (Exception x) when (onException != null) { onException.Invoke(x); }
             finally
             {
                 if (_padlock.IsReaderLockHeld)
@@ -65,5 +63,14 @@ namespace JasonPereira84.Helpers
             }
             return retVal;
         }
+
+        private void padlock_AcquireWriterLock(TimeSpan timeout) => _padlock.AcquireWriterLock(timeout);
+        private void padlock_ReleaseWriterLock()
+        {
+            var i = 5;
+            while (_padlock.IsWriterLockHeld && --i > 0)
+                _padlock.ReleaseWriterLock();
+        }
+        private Boolean padlock_IsWriterLockHeld() => _padlock.IsWriterLockHeld;
     }
 }

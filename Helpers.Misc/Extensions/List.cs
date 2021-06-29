@@ -22,7 +22,7 @@ namespace JasonPereira84.Helpers
             }
 
             public static List<TSource> EnsureAtLeastOne<TSource>(this List<TSource> source)
-                => source.Any() ? source : source.AddItem<TSource>(Activator.CreateInstance<TSource>());
+                => source.Any() ? source : source.AddItem(Activator.CreateInstance<TSource>());
         }
     }
 }

@@ -44,20 +44,6 @@ namespace JasonPereira84.Helpers
 
             public static UInt64 ToUInt64(this Double value, Double maxValue = Double.MaxValue, UInt64 minValue = UInt64.MinValue)
                 => Convert.ToUInt64(Math.Min(Math.Max(value, (double)minValue), maxValue));
-
-            #region Nullable
-            public static Boolean HasValue(this Nullable<UInt64> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<UInt64> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<UInt64> value, UInt64 otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<UInt64> value, UInt64 otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }
