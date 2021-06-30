@@ -25,3 +25,10 @@ jobs:
 
     - name: Run tests
       run: dotnet test --configuration Debug --no-restore --verbosity Normal
+
+    - name: Upload artifact 
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: BuildResults
+        if-no-files-found: error
