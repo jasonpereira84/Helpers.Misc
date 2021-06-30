@@ -10,7 +10,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Misc", "Helpers.Misc\Helpers.Misc.csproj", "{68656C70-6D69-7363-0000-000000737263}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Misc.Tests", "Helpers.Misc.Tests\Helpers.Misc.Tests.csproj", "{5F8C375F-4921-4BE9-9CB9-5A4EA1FE7CD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Misc.Tests", "Helpers.Misc.Tests\Helpers.Misc.Tests.csproj", "{5F8C375F-4921-4BE9-9CB9-5A4EA1FE7CD6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B149DF8A-1B04-4692-AE93-5F58AC90F043}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\develop.yml = .github\workflows\develop.yml
+		.github\workflows\master.yml = .github\workflows\master.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{F9D69B14-D468-41CB-9167-2970922CAF73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +38,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B149DF8A-1B04-4692-AE93-5F58AC90F043} = {F9D69B14-D468-41CB-9167-2970922CAF73}
+		{F9D69B14-D468-41CB-9167-2970922CAF73} = {537ACCD1-022B-4AFF-BE23-E5E7ACFAA1F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A61736F-6E70-6572-6569-726138340003}

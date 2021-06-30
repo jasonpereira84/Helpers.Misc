@@ -22,8 +22,8 @@ namespace JasonPereira84.Helpers.UnitTests
     internal class SomeException : Exception
     {
         public SomeException(): base() { }
-        public SomeException(string? message) : base(message) { }
-        public SomeException(string? message, Exception? innerException) : base(message, innerException) { }
+        public SomeException(string message) : base(message) { }
+        public SomeException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     internal class ExceptionWhileTesting : Exception
