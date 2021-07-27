@@ -13,7 +13,7 @@
     <AssemblyTitle>JasonPereira84's misc. helpers library</AssemblyTitle>
     <Description>Misc. helper methods, properties, objects etc.</Description>
 
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <PackageId>JasonPereira84.Helpers.Misc</PackageId>
     <Title>JasonPereira84 miscellaneous helpers library</Title>
