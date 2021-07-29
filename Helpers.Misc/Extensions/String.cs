@@ -33,6 +33,9 @@ namespace JasonPereira84.Helpers
                 String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
                 => _internalHelpers.EvaluateSanity(value, out result, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
 
+            public static Boolean EvaluateSanity(this String value, out String saneValue, Boolean dontTrim = false)
+                => _internalHelpers.EvaluateSanity(value, out saneValue, dontTrim);
+
             public static Boolean EvaluateSanity(this String value, String name, out String saneValue, Boolean dontTrim = false)
                 => _internalHelpers.EvaluateSanity(value, name, out saneValue, dontTrim);
 
