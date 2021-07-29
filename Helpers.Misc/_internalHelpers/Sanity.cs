@@ -36,6 +36,13 @@ namespace JasonPereira84.Helpers
             String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
             => result = EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
 
+        public static Boolean EvaluateSanity(this String value, out String saneValue, Boolean dontTrim = false)
+        {
+            var result = EvaluateSanity(value, $"NULL", $"EMPTY", $"WHITESPACE", dontTrim);
+            saneValue = result.Value;
+            return result.IsSane;
+        }
+
         public static Boolean EvaluateSanity(this String value, String name, out String saneValue, Boolean dontTrim = false)
         {
             var result = EvaluateSanity(value, $"NULL-{name}", $"EMPTY-{name}", $"WHITESPACE-{name}", dontTrim);
