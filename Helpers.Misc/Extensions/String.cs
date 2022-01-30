@@ -7,383 +7,269 @@ namespace JasonPereira84.Helpers
     {
         public static partial class Misc
         {
-            public static Boolean IsNull(this String value) => _internalHelpers.IsNull(value);
-            public static Boolean IsNotNull(this String value) => !_internalHelpers.IsNull(value);
+            public static Boolean IsNull(this String value) 
+                => value == null;
+            public static Boolean IsNotNull(this String value) 
+                => !IsNull(value);
 
-            public static Boolean IsEmpty(this String value) => _internalHelpers.IsEmpty(value);
-            public static Boolean IsNotEmpty(this String value) => !_internalHelpers.IsEmpty(value);
-
-            public static Boolean IsWhiteSpace(this String value) => _internalHelpers.IsWhiteSpace(value);
-            public static Boolean IsNotWhiteSpace(this String value) => !_internalHelpers.IsWhiteSpace(value);
-
-            public static Boolean IsNullOrEmpty(this String value) => _internalHelpers.IsNullOrEmpty(value);
-            public static Boolean IsNotNullOrEmpty(this String value) => !_internalHelpers.IsNullOrEmpty(value);
-
-            public static Boolean IsEmptyOrWhiteSpace(this String value) => _internalHelpers.IsEmptyOrWhiteSpace(value);
-            public static Boolean IsNotEmptyOrWhiteSpace(this String value) => !_internalHelpers.IsEmptyOrWhiteSpace(value);
-
-            public static Boolean IsNullOrEmptyOrWhiteSpace(this String value) => _internalHelpers.IsNullOrEmptyOrWhiteSpace(value);
-            public static Boolean IsNotNullOrEmptyOrWhiteSpace(this String value) => !_internalHelpers.IsNullOrEmptyOrWhiteSpace(value);
-
+            public static Boolean IsEmpty(this String value)
+                => value.IsNull()
+                    ? throw new ArgumentNullException(nameof(value))
+                    : value.Length.Equals(0);
+            public static Boolean IsNotEmpty(this String value) 
+                => !IsEmpty(value);
+            
+            public static Boolean IsWhiteSpace(this String value)
+                => value.IsNotEmpty() && value.Trim().Length.Equals(0);
+            public static Boolean IsNotWhiteSpace(this String value) 
+                => !IsWhiteSpace(value);
+            
+            public static Boolean IsNullOrEmpty(this String value) 
+                => value.IsNull() || value.Length.Equals(0);
+            public static Boolean IsNotNullOrEmpty(this String value) 
+                => !IsNullOrEmpty(value);
+            
+            public static Boolean IsEmptyOrWhiteSpace(this String value) 
+                => value.IsEmpty() || value.Trim().Length.Equals(0);
+            public static Boolean IsNotEmptyOrWhiteSpace(this String value) 
+                => !IsEmptyOrWhiteSpace(value);
+            
+            public static Boolean IsNullOrEmptyOrWhiteSpace(this String value) 
+                => String.IsNullOrWhiteSpace(value);
+            public static Boolean IsNotNullOrEmptyOrWhiteSpace(this String value) 
+                => !IsNullOrEmptyOrWhiteSpace(value);
+            
             public static (Boolean IsSane, String Value) EvaluateSanity(this String value, 
                 String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
-                => _internalHelpers.EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
-            public static (Boolean IsSane, String Value) EvaluateSanity(this String value,
-                out (Boolean IsSane, String Value) result,
-                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
-                => _internalHelpers.EvaluateSanity(value, out result, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
+                => value.IsNull()
+                    ? (false, valueIfNull)
+                    : value.IsEmpty()
+                        ? (false, valueIfEmpty)
+                        : value.IsWhiteSpace()
+                            ? (false, valueIfWhitespace)
+                            : (true, dontTrim ? value : value.Trim());
+            
+            public static Boolean EvaluateSanity(this String value, out String saneValue, String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+            {
+                var retVal = EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
+                saneValue = retVal.Value;
+                return retVal.IsSane;
+            }
 
-            public static Boolean EvaluateSanity(this String value, out String saneValue, Boolean dontTrim = false)
-                => _internalHelpers.EvaluateSanity(value, out saneValue, dontTrim);
+            public static Boolean EvaluateSanity(this String value, String variableName, out String saneValue, Boolean dontTrim = false)
+                =>  variableName.IsNullOrEmptyOrWhiteSpace()
+                    ? throw new ArgumentOutOfRangeException(nameof(variableName))
+                    : EvaluateSanity(value, out saneValue, $"NULL-{variableName}", $"EMPTY-{variableName}", $"WHITESPACE-{variableName}", dontTrim);
 
-            public static Boolean EvaluateSanity(this String value, String name, out String saneValue, Boolean dontTrim = false)
-                => _internalHelpers.EvaluateSanity(value, name, out saneValue, dontTrim);
+            public static String Sanitize(this String value, String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
+                => EvaluateSanity(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim).Value;
+
+            public static String Sanitize(this String value, String variableName, Boolean dontTrim = false)
+                => variableName.IsNullOrEmptyOrWhiteSpace()
+                    ? throw new ArgumentOutOfRangeException(nameof(variableName))
+                    : EvaluateSanity(value, $"NULL-{variableName}", $"EMPTY-{variableName}", $"WHITESPACE-{variableName}", dontTrim).Value;
 
             public static String SanitizeTo(this String value, String valueIfNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
-                => _internalHelpers.SanitizeTo(value, valueIfNullOrEmptyOrWhiteSpace, dontTrim);
+                => EvaluateSanity(value, valueIfNullOrEmptyOrWhiteSpace, valueIfNullOrEmptyOrWhiteSpace, valueIfNullOrEmptyOrWhiteSpace, dontTrim).Value;
 
-            public static String Sanitize(this String value,
-                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
-                => _internalHelpers.Sanitize(value, valueIfNull, valueIfEmpty, valueIfWhitespace, dontTrim);
-            public static String Sanitize(this String value, String name,
-                String valueIfNull = "NULL", String valueIfEmpty = "EMPTY", String valueIfWhitespace = "WHITESPACE", Boolean dontTrim = false)
-                => _internalHelpers.Sanitize(value, $"{valueIfNull}-{name}", $"{valueIfEmpty}-{name}", $"{valueIfWhitespace}-{name}", dontTrim);
+            public static Boolean Matches(this String value, String otherValue) 
+                => value.Equals(otherValue, StringComparison.OrdinalIgnoreCase);
+            
+            public static String SurroundWith(this String value, String @string) 
+                => $"{@string}{value}{@string}";
+            public static String SurroundWith(this String value, Char @char) 
+                => $"{@char}{value}{@char}";
+            
+            public static String QuoteSINGLE(this String value) 
+                => SurroundWith(value, "'");
 
-
-            public static Boolean Matches(this String value, String otherValue) => value.Equals(otherValue, StringComparison.OrdinalIgnoreCase);
-
-            public static String SurroundWith(this String value, String @string) => $"{@string}{value}{@string}";
-            public static String SurroundWith(this String value, Char @char) => $"{@char}{value}{@char}";
-
-            public static String QuoteSINGLE(this String value) => SurroundWith(value, "'");
-
-            public static String QuoteDOUBLE(this String value) => SurroundWith(value, '"');
-
-            public static String MaskWith(this String value, Int32 length, Char @char)
+            public static String QuoteDOUBLE(this String value) 
+                => SurroundWith(value, '"');
+            
+            public static String Mask(this String value, Int32 startIndex, Int32 length, Char @char = '*')
             {
-                var masked = new String(@char, length);
-                return length.Equals(value.Length) ? masked
-                    : masked + value.Substring(9, value.Length - length);
+                if (value.IsNull())
+                    throw new ArgumentNullException(nameof(value));
+
+                if (value.IsEmpty())
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                return value.Substring(0, startIndex) + new String(@char, (int)length) + value.Substring((int)(startIndex + length), (int)(value.Length - (startIndex + length)));
             }
+            public static String Mask(this String value, Int32 length, Char @char = '*')
+                => value.Mask(0, length, @char);
 
-            public static String Mask(this String value, Char @char = '*') => new String(@char, value.Length);
+            public static void IfNullOrEmptyOrWhiteSpace(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNullOrEmptyOrWhiteSpace(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNullOrEmptyOrWhiteSpace(this String value, Action action)
+                => value.IfNullOrEmptyOrWhiteSpace(s => action.Invoke());
 
-            public static void IfNotNullOrEmptyOrWhiteSpace(this String value, Action<String> actionIfTrue, Boolean dontTrim = false)
+            public static void IfNotNullOrEmptyOrWhiteSpace(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNotNullOrEmptyOrWhiteSpace(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNotNullOrEmptyOrWhiteSpace(this String value, Action action)
+                => value.IfNotNullOrEmptyOrWhiteSpace(s => action.Invoke());
+
+            public static void IfNull(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNull(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNull(this String value, Action action)
+                => value.IfNull(s => action.Invoke());
+
+            public static void IfNotNull(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNotNull(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNotNull(this String value, Action action)
+                => value.IfNotNull(s => action.Invoke());
+
+            public static void IfEmpty(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsEmpty(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfEmpty(this String value, Action action)
+                => value.IfEmpty(s => action.Invoke());
+
+            public static void IfNotEmpty(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNotEmpty(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNotEmpty(this String value, Action action)
+                => value.IfNotEmpty(s => action.Invoke());
+
+            public static void IfWhiteSpace(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsWhiteSpace(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfWhiteSpace(this String value, Action action)
+                => value.IfWhiteSpace(s => action.Invoke());
+
+            public static void IfNotWhiteSpace(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNotWhiteSpace(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNotWhiteSpace(this String value, Action action)
+                => value.IfNotWhiteSpace(s => action.Invoke());
+
+            public static void IfNullOrEmpty(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNullOrEmpty(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNullOrEmpty(this String value, Action action)
+                => value.IfNullOrEmpty(s => action.Invoke());
+
+            public static void IfNotNullOrEmpty(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNotNullOrEmpty(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNotNullOrEmpty(this String value, Action action)
+                => value.IfNotNullOrEmpty(s => action.Invoke());
+
+            public static void IfEmptyOrWhiteSpace(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsEmptyOrWhiteSpace(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfEmptyOrWhiteSpace(this String value, Action action)
+                => value.IfEmptyOrWhiteSpace(s => action.Invoke());
+
+            public static void IfNotEmptyOrWhiteSpace(this String value, Action<String> action)
+                => PredicatedOn(s => s.IsNotEmptyOrWhiteSpace(), value, actionIfTrue: action, actionIfFalse: Helpers.Do.Nothing);
+            public static void IfNotEmptyOrWhiteSpace(this String value, Action action)
+                => value.IfNotEmptyOrWhiteSpace(s => action.Invoke());
+
+            public static void If(this String value, Action<String> actionIfNull, Action<String> actionIfEmpty, Action<String> actionIfWhiteSpace,
+                Action<String> actionIfNotNullOrEmptyOrWhiteSpace)
             {
-                if (!String.IsNullOrWhiteSpace(value))
-                    actionIfTrue.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static void IfNullOrEmptyOrWhiteSpace(this String value, Action actionIfTrue)
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                    actionIfTrue.Invoke();
-            }
-
-            public static void IfNull(this String value, Action actionIfTrue)
-            {
-                if(_internalHelpers.IsNull(value))
-                    actionIfTrue.Invoke();
-            }
-
-            public static void IfEmpty(this String value, Action actionIfTrue)
-            {
-                if (_internalHelpers.IsEmpty(value))
-                    actionIfTrue.Invoke();
-            }
-
-            public static void IfWhiteSpace(this String value, Action actionIfTrue)
-            {
-                if (_internalHelpers.IsWhiteSpace(value))
-                    actionIfTrue.Invoke();
-            }
-
-            public static void IfNullOrEmpty(this String value, Action actionIfTrue)
-            {
-                if (_internalHelpers.IsNullOrEmpty(value))
-                    actionIfTrue.Invoke();
-            }
-
-            public static void IfEmptyOrWhiteSpace(this String value, Action actionIfTrue)
-            {
-                if (_internalHelpers.IsEmptyOrWhiteSpace(value))
-                    actionIfTrue.Invoke();
-            }
-
-            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action<String> actionIfWhiteSpace, 
-                Action<String> actionIfNotNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    actionIfNull.Invoke();
-                else if (_internalHelpers.IsEmpty(value))
-                    actionIfEmpty.Invoke();
-                else if (_internalHelpers.IsWhiteSpace(value))
+                if (value.IsNull())
+                    actionIfNull.Invoke(value);
+                else if (value.IsEmpty())
+                    actionIfEmpty.Invoke(value);
+                else if (value.IsWhiteSpace())
                     actionIfWhiteSpace.Invoke(value);
                 else
-                    actionIfNotNullOrEmptyOrWhiteSpace(dontTrim ? value : value.Trim());
-
+                    actionIfNotNullOrEmptyOrWhiteSpace.Invoke(value);
             }
+            public static void If(this String value, Action actionIfNull, Action<String> actionIfEmpty, Action<String> actionIfWhiteSpace,
+                Action<String> actionIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(s => actionIfNull.Invoke(), actionIfEmpty, actionIfWhiteSpace, actionIfNotNullOrEmptyOrWhiteSpace);
+            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action<String> actionIfWhiteSpace,
+                Action<String> actionIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(actionIfNull, s => actionIfEmpty.Invoke(), actionIfWhiteSpace, actionIfNotNullOrEmptyOrWhiteSpace);
+            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action actionIfWhiteSpace,
+                Action<String> actionIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(actionIfNull, actionIfEmpty, s => actionIfWhiteSpace.Invoke(), actionIfNotNullOrEmptyOrWhiteSpace);
+            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action actionIfWhiteSpace,
+                Action actionIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(actionIfNull, actionIfEmpty, actionIfWhiteSpace, s => actionIfNotNullOrEmptyOrWhiteSpace.Invoke());
 
-            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action actionIfWhiteSpace, 
-                Action<String> actionIfNotNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
+            public static String IfNullOrEmptyOrWhiteSpace(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNullOrEmptyOrWhiteSpace(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNullOrEmptyOrWhiteSpace(this String value, Func<String> func)
+                => value.IfNullOrEmptyOrWhiteSpace(s => func.Invoke());
+
+            public static String IfNotNullOrEmptyOrWhiteSpace(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNotNullOrEmptyOrWhiteSpace(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNotNullOrEmptyOrWhiteSpace(this String value, Func<String> func)
+                => value.IfNotNullOrEmptyOrWhiteSpace(s => func.Invoke());
+
+            public static String IfNull(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNull(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNull(this String value, Func<String> func)
+                => value.IfNull(s => func.Invoke());
+
+            public static String IfNotNull(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNotNull(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNotNull(this String value, Func<String> func)
+                => value.IfNotNull(s => func.Invoke());
+
+            public static String IfEmpty(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsEmpty(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfEmpty(this String value, Func<String> func)
+                => value.IfEmpty(s => func.Invoke());
+
+            public static String IfNotEmpty(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNotEmpty(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNotEmpty(this String value, Func<String> func)
+                => value.IfNotEmpty(s => func.Invoke());
+
+            public static String IfWhiteSpace(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsWhiteSpace(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfWhiteSpace(this String value, Func<String> func)
+                => value.IfWhiteSpace(s => func.Invoke());
+
+            public static String IfNotWhiteSpace(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNotWhiteSpace(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNotWhiteSpace(this String value, Func<String> func)
+                => value.IfNotWhiteSpace(s => func.Invoke());
+
+            public static String IfNullOrEmpty(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNullOrEmpty(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNullOrEmpty(this String value, Func<String> func)
+                => value.IfNullOrEmpty(s => func.Invoke());
+
+            public static String IfNotNullOrEmpty(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNotNullOrEmpty(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNotNullOrEmpty(this String value, Func<String> func)
+                => value.IfNotNullOrEmpty(s => func.Invoke());
+
+            public static String IfEmptyOrWhiteSpace(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsEmptyOrWhiteSpace(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfEmptyOrWhiteSpace(this String value, Func<String> func)
+                => value.IfEmptyOrWhiteSpace(s => func.Invoke());
+
+            public static String IfNotEmptyOrWhiteSpace(this String value, Func<String, String> func)
+                => PredicatedOn(s => s.IsNotEmptyOrWhiteSpace(), value, funcIfTrue: func, funcIfFalse: Helpers.Do.NothingWith);
+            public static String IfNotEmptyOrWhiteSpace(this String value, Func<String> func)
+                => value.IfNotEmptyOrWhiteSpace(s => func.Invoke());
+
+            public static String If(this String value, Func<String, String> funcIfNull, Func<String, String> funcIfEmpty, Func<String, String> funcIfWhiteSpace,
+                Func<String, String> funcIfNotNullOrEmptyOrWhiteSpace)
             {
-                if (_internalHelpers.IsNull(value))
-                    actionIfNull.Invoke();
-                else if (_internalHelpers.IsEmpty(value))
-                    actionIfEmpty.Invoke();
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    actionIfWhiteSpace.Invoke();
-                else
-                    actionIfNotNullOrEmptyOrWhiteSpace(dontTrim ? value : value.Trim());
+                if (value.IsNull())
+                    return funcIfNull.Invoke(value);
 
+                if (value.IsEmpty())
+                    return funcIfEmpty.Invoke(value);
+
+                if (value.IsWhiteSpace())
+                    return funcIfWhiteSpace.Invoke(value);
+
+                return funcIfNotNullOrEmptyOrWhiteSpace.Invoke(value);
             }
-
-            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action<String> actionIfWhiteSpace)
-            {
-                if (_internalHelpers.IsNull(value))
-                    actionIfNull.Invoke();
-                else if (_internalHelpers.IsEmpty(value))
-                    actionIfEmpty.Invoke();
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    actionIfWhiteSpace.Invoke(value);
-            }
-
-            public static void If(this String value, Action actionIfNull, Action actionIfEmpty, Action actionIfWhiteSpace)
-            {
-                if (_internalHelpers.IsNull(value))
-                    actionIfNull.Invoke();
-                else if (_internalHelpers.IsEmpty(value))
-                    actionIfEmpty.Invoke();
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    actionIfWhiteSpace.Invoke();
-            }
-
-            public static String IfNotNullOrEmptyOrWhiteSpace(this String value, Func<String, String> funcIfTrue, Func<String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                    return funcIfFalse.Invoke();
-
-                return funcIfTrue.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfNotNullOrEmptyOrWhiteSpace(this String value, Func<String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                    return funcIfFalse.Invoke();
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfNull(this String value, Func<String, String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    funcIfTrue.Invoke("NULL");
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfNull(this String value, Func<String, String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    funcIfTrue.Invoke("NULL");
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfNull(this String value, Func<String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    funcIfTrue.Invoke();
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfNull(this String value, Func<String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    funcIfTrue.Invoke();
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfEmpty(this String value, Func<String, String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmpty(value))
-                    funcIfTrue.Invoke("EMPTY");
-
-                return funcIfFalse(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfEmpty(this String value, Func<String, String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmpty(value))
-                    funcIfTrue.Invoke("EMPTY");
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfEmpty(this String value, Func<String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmpty(value))
-                    funcIfTrue.Invoke();
-
-                return funcIfFalse(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfEmpty(this String value, Func<String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmpty(value))
-                    funcIfTrue.Invoke();
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfWhiteSpace(this String value, Func<String, String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsWhiteSpace(value))
-                    funcIfTrue.Invoke("WHITESPACE");
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfWhiteSpace(this String value, Func<String, String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsWhiteSpace(value))
-                    funcIfTrue.Invoke("WHITESPACE");
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfWhiteSpace(this String value, Func<String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsWhiteSpace(value))
-                    funcIfTrue.Invoke();
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfWhiteSpace(this String value, Func<String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsWhiteSpace(value))
-                    funcIfTrue.Invoke();
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfNullOrEmpty(this String value, Func<String, String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNullOrEmpty(value))
-                    funcIfTrue.Invoke("NULL-OR-EMPTY");
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfNullOrEmpty(this String value, Func<String, String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNullOrEmpty(value))
-                    funcIfTrue.Invoke("NULL-OR-EMPTY");
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfNullOrEmpty(this String value, Func<String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNullOrEmpty(value))
-                    funcIfTrue.Invoke();
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfNullOrEmpty(this String value, Func<String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNullOrEmpty(value))
-                    funcIfTrue.Invoke();
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfEmptyOrWhiteSpace(this String value, Func<String, String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmptyOrWhiteSpace(value))
-                    funcIfTrue.Invoke("EMPTY-OR-WHITESPACE");
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfEmptyOrWhiteSpace(this String value, Func<String, String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmptyOrWhiteSpace(value))
-                    funcIfTrue.Invoke("EMPTY-OR-WHITESPACE");
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String IfEmptyOrWhiteSpace(this String value, Func<String> funcIfTrue, Func<String, String> funcIfFalse, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmptyOrWhiteSpace(value))
-                    funcIfTrue.Invoke();
-
-                return funcIfFalse.Invoke(dontTrim ? value : value.Trim());
-            }
-
-            public static String IfEmptyOrWhiteSpace(this String value, Func<String> funcIfTrue, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsEmptyOrWhiteSpace(value))
-                    funcIfTrue.Invoke();
-
-                return dontTrim ? value : value.Trim();
-            }
-
-            public static String If(this String value, Func<String, String> funcIfNull, Func<String, String> funcIfEmpty, Func<String, String> funcIfWhiteSpace, 
-                Func<String, String> funcIfNotNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    return funcIfNull.Invoke("NULL");
-                else if (_internalHelpers.IsEmpty(value))
-                    return funcIfEmpty.Invoke("EMPTY");
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    return funcIfWhiteSpace.Invoke("WHITESPACE");
-                else
-                    return funcIfNotNullOrEmptyOrWhiteSpace(dontTrim ? value : value.Trim());
-            }
-
-            public static String If(this String value, Func<String, String> funcIfNull, Func<String, String> funcIfEmpty, Func<String, String> funcIfWhiteSpace, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    return funcIfNull.Invoke("NULL");
-                else if (_internalHelpers.IsEmpty(value))
-                    return funcIfEmpty.Invoke("EMPTY");
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    return funcIfWhiteSpace.Invoke("WHITESPACE");
-                else
-                    return dontTrim ? value : value.Trim();
-            }
-
+            public static String If(this String value, Func<String> funcIfNull, Func<String, String> funcIfEmpty, Func<String, String> funcIfWhiteSpace,
+                Func<String, String> funcIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(s => funcIfNull.Invoke(), funcIfEmpty, funcIfWhiteSpace, funcIfNotNullOrEmptyOrWhiteSpace);
+            public static String If(this String value, Func<String> funcIfNull, Func<String> funcIfEmpty, Func<String, String> funcIfWhiteSpace,
+                Func<String, String> funcIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(funcIfNull, s => funcIfEmpty.Invoke(), funcIfWhiteSpace, funcIfNotNullOrEmptyOrWhiteSpace);
             public static String If(this String value, Func<String> funcIfNull, Func<String> funcIfEmpty, Func<String> funcIfWhiteSpace,
-                Func<String, String> funcIfNotNullOrEmptyOrWhiteSpace, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    return funcIfNull.Invoke();
-                else if (_internalHelpers.IsEmpty(value))
-                    return funcIfEmpty.Invoke();
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    return funcIfWhiteSpace.Invoke();
-                else
-                    return funcIfNotNullOrEmptyOrWhiteSpace(dontTrim ? value : value.Trim());
-            }
-
-            public static String If(this String value, Func<String> funcIfNull, Func<String> funcIfEmpty, Func<String> funcIfWhiteSpace, Boolean dontTrim = false)
-            {
-                if (_internalHelpers.IsNull(value))
-                    return funcIfNull.Invoke();
-                else if (_internalHelpers.IsEmpty(value))
-                    return funcIfEmpty.Invoke();
-                else if (_internalHelpers.IsWhiteSpace(value))
-                    return funcIfWhiteSpace.Invoke();
-                else
-                    return dontTrim ? value : value.Trim();
-            }
-
+                Func<String, String> funcIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(funcIfNull, funcIfEmpty, s => funcIfWhiteSpace.Invoke(), funcIfNotNullOrEmptyOrWhiteSpace);
+            public static String If(this String value, Func<String> funcIfNull, Func<String> funcIfEmpty, Func<String> funcIfWhiteSpace,
+                Func<String> funcIfNotNullOrEmptyOrWhiteSpace)
+                => value.If(funcIfNull, funcIfEmpty, funcIfWhiteSpace, s => funcIfNotNullOrEmptyOrWhiteSpace.Invoke());
 
         }
     }

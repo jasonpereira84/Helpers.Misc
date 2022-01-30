@@ -4,47 +4,59 @@ namespace JasonPereira84.Helpers
 {
     public interface IPerson
     {
-        String First { get; }
+        String LastName { get; }
 
-        String Last { get; }
+        String FirstName { get; }
     }
 
     public class Person : IPerson
     {
-        public String First { get; set; } = default(String);
+        public String LastName { get; set; } = default(String);
 
-        public String Last { get; set; } = default(String);
+        public String FirstName { get; set; } = default(String);
     }
 
     public sealed class SanePerson : IPerson
     {
-        public String Last { get; private set; }
+        public String LastName { get; private set; }
 
-        public String First { get; private set; }
+        public String FirstName { get; private set; }
 
-        private SanePerson(String last, String first) 
-        {
-            Last = last;
-            First = first;
-        }
+        private SanePerson() { }
+
+        private static String sanitizer(String name, String value)
+            => value == null
+                ? $"NULL-{name}"
+                : value.Length.Equals(0)
+                    ? $"EMPTY-{name}"
+                    : (value = value.Trim()).Length.Equals(0)
+                        ? $"WHITESPACE-{name}"
+                        : value;
 
         public static SanePerson From(IPerson person, Func<String, String> sanitizerLAST, Func<String, String> sanitizerFIRST)
-            => new SanePerson(sanitizerLAST.Invoke(person.Last), sanitizerFIRST.Invoke(person.First));
+        {
+            if (person == null)
+                throw new ArgumentNullException(nameof(person));
+
+            if (sanitizerLAST == null)
+                throw new ArgumentNullException(nameof(sanitizerLAST));
+
+            if (sanitizerFIRST == null)
+                throw new ArgumentNullException(nameof(sanitizerFIRST));
+
+            return new SanePerson
+            {
+                LastName = sanitizer(nameof(IPerson.LastName), sanitizerLAST.Invoke(person.LastName)),
+                FirstName = sanitizer(nameof(IPerson.FirstName), sanitizerFIRST.Invoke(person.FirstName))
+            };
+        }
 
         public static SanePerson From(IPerson person, Func<String, String> sanitizer)
             => From(person, sanitizer, sanitizer);
 
         public static SanePerson From(IPerson person)
-        {
-            String _sanitize(String name, String value)
-            {
-                _internalHelpers.EvaluateSanity(value, name, out String saneValue);
-                return saneValue;
-            }
-
-            return From(person,
-                sanitizerLAST: v => _sanitize(nameof(IPerson.Last), v), 
-                sanitizerFIRST: v => _sanitize(nameof(IPerson.First), v));
-        }
+            => From(person,
+                sanitizerLAST: v => sanitizer(nameof(IPerson.LastName), v),
+                sanitizerFIRST: v => sanitizer(nameof(IPerson.FirstName), v));
     }
 }

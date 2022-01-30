@@ -9,11 +9,11 @@ namespace JasonPereira84.Helpers
     {
         public static partial class Misc
         {
-            public static IEnumerable<KeyValuePair<String, String>> ToPairs(this NameValueCollection nameValueCollection)
-            {
-                var collection = nameValueCollection ?? throw new ArgumentNullException(nameof(nameValueCollection));
-                return collection.Cast<String>().Select(key => new KeyValuePair<String, String>(key, collection[key]));
-            }
+            public static IEnumerable<KeyValuePair<String, String>> AsPairs(this NameValueCollection nameValueCollection)
+                => nameValueCollection == null
+                    ? throw new ArgumentNullException(nameof(nameValueCollection))
+                    : nameValueCollection.Cast<String>().Select(key => new KeyValuePair<String, String>(key, nameValueCollection[key]));
+
         }
     }
 }

@@ -1,76 +1,81 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
-using System.Globalization;
 using System.ComponentModel;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
     public sealed class ConcurrentValve
     {
         [DefaultValue(Unknown)]
-        public enum StatesEnum
+        public enum States
         {
             Closed = -1,
             Unknown = 0,
             Opened = 1,
         }
 
-        private readonly ReaderWriterLock _padlock = new ReaderWriterLock();
+        internal States _state;
+        internal DateTimeOffset _modifiedOn;
 
-        private StatesEnum _state;
-        private DateTimeOffset _modifiedOn;
+        internal readonly ReaderWriterLockSlim _padlock;
 
-        public ConcurrentValve(StatesEnum initialState)
+        public ConcurrentValve(States initialState, LockRecursionPolicy lockRecursionPolicy = LockRecursionPolicy.NoRecursion)
         {
             _state = initialState;
             _modifiedOn = DateTimeOffset.Now;
+
+            _padlock = new ReaderWriterLockSlim(lockRecursionPolicy);
         }
 
-        public Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)> Set(StatesEnum state, TimeSpan timeout, Action<ApplicationException> onTimeout)
+        ~ConcurrentValve()
         {
-            var retVal = default(Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)>);
-            try
-            {
-                _padlock.AcquireWriterLock(timeout);
-                _state = state;
-                _modifiedOn = DateTimeOffset.Now;
-                retVal = (State: _state, ModifiedOn: _modifiedOn);
-            }
-            catch (ApplicationException x) when (onTimeout != null) { onTimeout.Invoke(x); }
-            finally
-            {
-                if (_padlock.IsWriterLockHeld)
-                    _padlock.ReleaseWriterLock();
-            }
+            if (_padlock != null) 
+                _padlock.Dispose();
+        }
+
+        public Nullable<(States State, DateTimeOffset ModifiedOn)> Get(TimeSpan timeout)
+        {
+            var retVal = default(Nullable<(States State, DateTimeOffset ModifiedOn)>);
+            if (_padlock.TryEnterReadLock(timeout))
+                try
+                {
+                    retVal = (_state, _modifiedOn);
+                }
+                finally
+                {
+                    if (_padlock.IsReadLockHeld)
+                        _padlock.ExitReadLock();
+                }
             return retVal;
         }
 
-        public Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)> Get(TimeSpan timeout, Action<ApplicationException> onTimeout)
+        public Nullable<(States State, DateTimeOffset ModifiedOn)> Set(States state, TimeSpan timeout)
         {
-            var retVal = default(Nullable<(StatesEnum State, DateTimeOffset ModifiedOn)>);
-            try
-            {
-                _padlock.AcquireReaderLock(timeout);
-                retVal = (State: _state, ModifiedOn: _modifiedOn);
-            }
-            catch (ApplicationException x) when (onTimeout != null) { onTimeout.Invoke(x); }
-            finally
-            {
-                if (_padlock.IsReaderLockHeld)
-                    _padlock.ReleaseReaderLock();
-            }
+            var retVal = default(Nullable<(States State, DateTimeOffset ModifiedOn)>);
+            if (_padlock.TryEnterUpgradeableReadLock(timeout))
+                try
+                {
+                    if (!state.Equals(_state))
+                        if (_padlock.TryEnterWriteLock(timeout))
+                            try
+                            {
+                                _state = state;
+                                _modifiedOn = DateTimeOffset.Now;
+                            }
+                            finally
+                            {
+                                if (_padlock.IsWriteLockHeld)
+                                    _padlock.ExitWriteLock();
+                            }
+                    retVal = (_state, _modifiedOn);
+                }
+                finally
+                {
+                    if (_padlock.IsUpgradeableReadLockHeld)
+                        _padlock.ExitUpgradeableReadLock();
+                }
             return retVal;
         }
 
-        private void padlock_AcquireWriterLock(TimeSpan timeout) => _padlock.AcquireWriterLock(timeout);
-        private void padlock_ReleaseWriterLock()
-        {
-            var i = 5;
-            while (_padlock.IsWriterLockHeld && --i > 0)
-                _padlock.ReleaseWriterLock();
-        }
-        private Boolean padlock_IsWriterLockHeld() => _padlock.IsWriterLockHeld;
     }
 }

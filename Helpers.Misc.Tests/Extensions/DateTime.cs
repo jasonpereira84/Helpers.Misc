@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace JasonPereira84.Helpers.UnitTests
+namespace JasonPereira84.Helpers.Tests
 {
     namespace Extensions
     {
@@ -11,67 +11,242 @@ namespace JasonPereira84.Helpers.UnitTests
         public class Test_DateTime
         {
             [TestMethod]
-            public void FirstWeekdayOfMonth()
+            public void AsDateTimeUTC()
             {
-                Assert.AreEqual(1, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Tuesday).Day);
-                Assert.AreEqual(2, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Wednesday).Day);
-                Assert.AreEqual(3, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Thursday).Day);
-                Assert.AreEqual(4, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Friday).Day);
-                Assert.AreEqual(5, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Saturday).Day);
-                Assert.AreEqual(6, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Sunday).Day);
-                Assert.AreEqual(7, MonthsOfYear.June.FirstWeekdayOfMonth(2021, DayOfWeek.Monday).Day);
+                Assert.AreEqual(
+                    expected: new DateTime(2019, 1, 1, 0, 0, 0),
+                    actual: 63681897600UL.AsDateTimeUTC());
             }
 
             [TestMethod]
-            public void LastWeekdayOfMonth()
+            public void AsUnixTime()
             {
-                Assert.AreEqual(24, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Thursday).Day);
-                Assert.AreEqual(25, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Friday).Day);
-                Assert.AreEqual(26, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Saturday).Day);
-                Assert.AreEqual(27, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Sunday).Day);
-                Assert.AreEqual(28, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Monday).Day);
-                Assert.AreEqual(29, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Tuesday).Day);
-                Assert.AreEqual(30, MonthsOfYear.June.LastWeekdayOfMonth(2021, DayOfWeek.Wednesday).Day);
+                {
+                    Assert.AreEqual(
+                        expected: 1546300800UL,
+                        actual: (new DateTime(2019, 1, 1, 0, 0, 0)).AsUnixTime());
+                }
+
+                {
+                    Assert.AreEqual(
+                        expected: 1546300800UL,
+                        actual: (new DateTimeOffset(2019, 1, 1, 0, 0, 0, TimeSpan.Zero)).AsUnixTime());
+                }
+            }
+
+            [TestMethod]
+            public void FirstDayOfMonth()
+            {
+                {
+                    {
+                        var year = (UInt16)0;
+                        Assert.ThrowsException<ArgumentOutOfRangeException>(
+                            () => year.FirstDayOfMonth(MonthsOfYear.January, DateTimeKind.Utc));
+                    }
+
+                    {
+                        var year = (UInt16)2019;
+                        Assert.AreEqual(
+                            expected: new DateTime(2019, 1, 1),
+                            actual: year.FirstDayOfMonth(MonthsOfYear.January, DateTimeKind.Utc));
+                    }
+                }
+
+                {
+                    {
+                        Assert.ThrowsException<ArgumentOutOfRangeException>(
+                            () => MonthsOfYear.January.FirstDayOfMonth(0));
+                    }
+
+                    {
+                        Assert.AreEqual(
+                            expected: new DateTime(2019, 1, 1),
+                            actual: MonthsOfYear.January.FirstDayOfMonth(2019));
+                    }
+                }
+
+            }
+
+            [TestMethod]
+            public void FirstDayOfWeekOfMonth()
+            {
+                Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    () => MonthsOfYear.January.FirstDayOfWeekOfMonth(0, DayOfWeek.Sunday));
+
+                Assert.AreEqual(
+                    expected: 6, 
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Sunday).Day);
+                Assert.AreEqual(
+                    expected: 7,
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Monday).Day);
+                Assert.AreEqual(
+                    expected: 1,
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Tuesday).Day);
+                Assert.AreEqual(
+                    expected: 2,
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Wednesday).Day);
+                Assert.AreEqual(
+                    expected: 3,
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Thursday).Day);
+                Assert.AreEqual(
+                    expected: 4,
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Friday).Day);
+                Assert.AreEqual(
+                    expected: 5,
+                    actual: MonthsOfYear.January.FirstDayOfWeekOfMonth(2019, DayOfWeek.Saturday).Day);
+            }
+
+            [TestMethod]
+            public void LastDayOfWeekOfMonth()
+            {
+                Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    () => MonthsOfYear.January.LastDayOfWeekOfMonth(0, DayOfWeek.Sunday));
+
+                Assert.AreEqual(
+                    expected: 27,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Sunday).Day);
+                Assert.AreEqual(
+                    expected: 28,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Monday).Day);
+                Assert.AreEqual(
+                    expected: 29,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Tuesday).Day);
+                Assert.AreEqual(
+                    expected: 30,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Wednesday).Day);
+                Assert.AreEqual(
+                    expected: 31,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Thursday).Day);
+                Assert.AreEqual(
+                    expected: 25,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Friday).Day);
+                Assert.AreEqual(
+                    expected: 26,
+                    actual: MonthsOfYear.January.LastDayOfWeekOfMonth(2019, DayOfWeek.Saturday).Day);
             }
 
             [TestMethod]
             public void DayOfMonth()
             {
-                {
-                    Assert.AreEqual(30, MonthsOfYear.June.DayOfMonth(2021, WeekOfMonth.Fifth, DayOfWeek.Wednesday).Day);
-                }
+                Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    () => MonthsOfYear.January.DayOfMonth(0, WeekOfMonth.First, DayOfWeek.Sunday));
 
-                {
-                    try
-                    {
-                        MonthsOfYear.June.DayOfMonth(2021, WeekOfMonth.Fifth, DayOfWeek.Thursday);
-                    }
-                    catch(DateNotFoundException)
-                    {
-                        Assert.IsTrue(true);
-                    }
-                    Assert.AreEqual(24, MonthsOfYear.June.DayOfMonth(2021, WeekOfMonth.Fifth, DayOfWeek.Thursday, dontThrowException: true).Day);
-                }
+                Assert.AreEqual(
+                    expected: 6, 
+                    actual: MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.First, DayOfWeek.Sunday).Day);
+
+                Assert.AreEqual(
+                    expected: 28,
+                    actual: MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.Fourth, DayOfWeek.Monday).Day);
+
+                Assert.ThrowsException<DateNotFoundException>(
+                    () => MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.Fifth, DayOfWeek.Monday));
+                Assert.AreEqual(
+                    expected: 28,
+                    actual: MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.Fifth, DayOfWeek.Monday, dontThrowException: true).Day);
+
+                Assert.AreEqual(
+                    expected: 29,
+                    actual: MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.Fifth, DayOfWeek.Tuesday).Day);
             }
 
             [TestMethod]
             public void DayOfYear()
             {
                 {
-                    Assert.AreEqual(31, 2021.DayOfYear(WeekOfYear.FiftySecond, DayOfWeek.Friday).Day);
+                    var year = (UInt16)0;
+                    Assert.ThrowsException<ArgumentOutOfRangeException>(
+                        () => year.DayOfYear(WeekOfYear.First, DayOfWeek.Sunday));
                 }
 
                 {
-                    try
-                    {
-                        2021.DayOfYear(WeekOfYear.FiftySecond, DayOfWeek.Saturday);
-                    }
-                    catch (DateNotFoundException)
-                    {
-                        Assert.IsTrue(true);
-                    }
-                    Assert.AreEqual(25, 2021.DayOfYear(WeekOfYear.FiftySecond, DayOfWeek.Saturday, dontThrowException: true).Day);
+                    var year = (UInt16)2019;
+
+                    Assert.AreEqual(
+                        expected: 11,
+                        actual: year.DayOfYear(WeekOfYear.Second, DayOfWeek.Friday).Day);
+
+                    Assert.AreEqual(
+                        expected: 31,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Tuesday).Day);
+
+                    Assert.ThrowsException<DateNotFoundException>(
+                        () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Wednesday));
+                    Assert.AreEqual(
+                        expected: 25,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Wednesday, true).Day);
                 }
+
+                {
+                    var year = (UInt16)2018;
+
+                    Assert.AreEqual(
+                        expected: 12,
+                        actual: year.DayOfYear(WeekOfYear.Second, DayOfWeek.Friday).Day);
+
+                    Assert.AreEqual(
+                        expected: 31,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Monday).Day);
+
+                    Assert.ThrowsException<DateNotFoundException>(
+                        () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Tuesday));
+                    Assert.AreEqual(
+                        expected: 25,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Tuesday, true).Day);
+                }
+
+                {
+                    var year = (UInt16)2017;
+
+                    Assert.AreEqual(
+                        expected: 13,
+                        actual: year.DayOfYear(WeekOfYear.Second, DayOfWeek.Friday).Day);
+
+                    Assert.AreEqual(
+                        expected: 31,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Sunday).Day);
+
+                    Assert.ThrowsException<DateNotFoundException>(
+                        () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Monday));
+                    Assert.AreEqual(
+                        expected: 25,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Monday, true).Day);
+                }
+
+                {
+                    var year = (UInt16)2016;
+
+                    Assert.AreEqual(
+                        expected: 8,
+                        actual: year.DayOfYear(WeekOfYear.Second, DayOfWeek.Friday).Day);
+
+                    Assert.AreEqual(
+                        expected: 31,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Saturday).Day);
+
+                    Assert.AreEqual(
+                        expected: 25,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Sunday).Day);
+                }
+
+                {
+                    var year = (UInt16)2015;
+
+                    Assert.AreEqual(
+                        expected: 9,
+                        actual: year.DayOfYear(WeekOfYear.Second, DayOfWeek.Friday).Day);
+
+                    Assert.AreEqual(
+                        expected: 31,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Thursday).Day);
+
+                    Assert.ThrowsException<DateNotFoundException>(
+                        () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Friday));
+                    Assert.AreEqual(
+                        expected: 25,
+                        actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Friday, true).Day);
+                }
+
             }
 
         }

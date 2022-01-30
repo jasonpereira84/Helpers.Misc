@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
-using System.Diagnostics;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
@@ -10,6 +7,15 @@ namespace JasonPereira84.Helpers
     {
         public static partial class Misc
         {
+            public static Assembly LoadAssembly(this String assemblyName)
+                => Assembly.Load(new AssemblyName(assemblyName));
+
+            public static Boolean TryLoadLoadAssembly(this String assemblyName, out Assembly assembly)
+            {
+                assembly = LoadAssembly(assemblyName);
+                return assembly != null;
+            }
+
             public static T[] GetAssemblyAttributes<T>(this Assembly assembly)
                 where T : Attribute
             {
@@ -45,25 +51,6 @@ namespace JasonPereira84.Helpers
                 return SanitizeTo(_tryGet()?.Configuration, defaultValue);
             }
 
-            public static Assembly InitialAssembly(this StackTrace stackTrace, String currentAssemblyFullName)
-            {
-                var callerAssemblies = new List<Assembly>();
-                foreach (var frame in (stackTrace?.GetFrames() ?? new StackFrame[0]))
-                {
-                    Assembly assembly;
-                    if ((assembly = frame?.GetMethod()?.ReflectedType?.Assembly).IsNotNull())
-                        callerAssemblies.Add(assembly);
-                };
-                return callerAssemblies
-                    .Where(assembly =>
-                        assembly.GetReferencedAssemblies()
-                        .Any(assemblyName => assemblyName.FullName.Matches(currentAssemblyFullName)))
-                    .Last();
-            }
-
-            public static Assembly LoadAssembly(this String assemblyName) => Assembly.Load(new AssemblyName(assemblyName));
-
-            public static Assembly LoadAssembly(this String assemblyName, out Assembly assembly) => assembly = LoadAssembly(assemblyName);
         }
     }
 }
