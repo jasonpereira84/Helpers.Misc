@@ -7,40 +7,29 @@ namespace JasonPereira84.Helpers
         public static partial class Misc
         {
             public static Boolean NotEquals(this Double value, Double otherValue)
-            => !value.Equals(otherValue);
-
-            public static Boolean Equals<TEnum>(this Double value, TEnum otherValue)
-                where TEnum : struct
-                => value.Equals(otherValue);
-
-            public static Boolean NotEquals<TEnum>(this Double value, TEnum otherValue)
-                where TEnum : struct
                 => !value.Equals(otherValue);
 
             public static Boolean GreaterThan(this Double value, Double otherValue)
                 => value > otherValue;
 
             public static Boolean GreaterThanOrEqualTo(this Double value, Double otherValue)
-                => value.GreaterThan(otherValue) ? true
-                    : value.Equals(otherValue);
+                => value.GreaterThan(otherValue) || value.Equals(otherValue);
 
             public static Boolean LessThan(this Double value, Double otherValue)
                 => value < otherValue;
 
             public static Boolean LessThanOrEqualTo(this Double value, Double otherValue)
-                => value.LessThan(otherValue) ? true
-                    : value.Equals(otherValue);
+                => value.LessThan(otherValue) || value.Equals(otherValue);
 
-            public static Boolean ToBoolean(this Double value)
-                => value.NotEquals(Double.MinValue);
+            public static Boolean EqualsZero(this Double value)
+                => value.Equals((Double)0);
+            public static Boolean NotEqualsZero(this Double value)
+                => !value.EqualsZero();
 
-            public static Double ToDouble(this Boolean value)
-                => !value
-                    ? Double.MinValue
-                    : Double.MaxValue;
-
-            public static Boolean IsNegative(this Double value) => value < 0.0;
-            public static Boolean IsNotNegative(this Double value) => value >= 0.0;
+            public static Boolean IsNegative(this Double value)
+                => value.LessThan((Double)0);
+            public static Boolean IsNotNegative(this Double value)
+                => !value.IsNegative();
         }
     }
 }

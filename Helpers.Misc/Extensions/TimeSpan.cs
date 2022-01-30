@@ -20,26 +20,35 @@ namespace JasonPereira84.Helpers
                 => value.LessThan(otherValue) ? true
                     : value.Equals(otherValue);
 
-            public static TimeSpan RemainingTimeSpan(this UInt64 untilUnixtime, UInt64? currentUnixtime = null, Boolean ignoreNegative = true)
+            public static Boolean EqualsZero(this TimeSpan value)
+                => value.Equals(TimeSpan.Zero);
+            public static Boolean NotEqualsZero(this TimeSpan value)
+                => !value.EqualsZero();
+
+            public static Boolean IsNegative(this TimeSpan value)
+                => value.LessThan(TimeSpan.Zero);
+            public static Boolean IsNotNegative(this TimeSpan value)
+                => !value.IsNegative();
+
+            public static TimeSpan RemainingTimeSpan(this UInt64 secondsUntil, UInt64 currentUnixTime, Boolean ignoreNegative = false)
             {
-                currentUnixtime = currentUnixtime ?? DateTime.UtcNow.ToUnixtime();
+                var secondsUntilGreaterThanCurrentUnixTime = secondsUntil.GreaterThanOrEqualTo(currentUnixTime);
+                if (secondsUntilGreaterThanCurrentUnixTime.IsFalse() && ignoreNegative.IsFalse())
+                    throw new ArgumentOutOfRangeException(nameof(secondsUntil), $"{nameof(secondsUntil)}<{secondsUntil}> CANNOT be less than {nameof(currentUnixTime)}<{currentUnixTime}>");
 
-                var isGreater = untilUnixtime.GreaterThan(currentUnixtime.Value);
-                Ensure.That<ArgumentOutOfRangeException>(isGreater || ignoreNegative,
-                    $"{nameof(untilUnixtime)}<{untilUnixtime}> CANNOT be less than {nameof(currentUnixtime)}<{currentUnixtime.Value}>");
-
-                var remainingSeconds = UInt64.MinValue;
-                if (isGreater.IsTrue())
-                    remainingSeconds = untilUnixtime - currentUnixtime.Value;
-
-                return TimeSpan.FromSeconds(Convert.ToDouble(remainingSeconds));
+                return TimeSpan.FromSeconds(
+                    secondsUntilGreaterThanCurrentUnixTime
+                        ? Convert.ToDouble(secondsUntil - currentUnixTime)
+                        : -Convert.ToDouble(currentUnixTime - secondsUntil));
             }
+            public static TimeSpan RemainingTimeSpan(this UInt64 secondsUntilCurrentUnixTime, Boolean ignoreNegative = false)
+                => secondsUntilCurrentUnixTime.RemainingTimeSpan(DateTime.UtcNow.AsUnixTime(), ignoreNegative);
 
             public static String AsWords(this TimeSpan timeSpan,
-                String format_Days = null,
-                String format_Hours = null,
-                String format_Minutes = null,
-                String format_Seconds = null)
+                String format_Days = default,
+                String format_Hours = default,
+                String format_Minutes = default,
+                String format_Seconds = default)
             {
                 var dF = format_Days.SanitizeTo("{0} days");
                 var hF = format_Hours.SanitizeTo("{0} hours");
@@ -56,23 +65,9 @@ namespace JasonPereira84.Helpers
                               ? $"{String.Format(mF, m)} {str(0, 0, 0, s)}"
                               : String.Format(sF, s);
                 }
-
                 return str(timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
             }
 
-            #region Nullable
-            public static Boolean HasValue(this Nullable<TimeSpan> value)
-                => value.HasValue;
-
-            public static Boolean HasNoValue(this Nullable<TimeSpan> value)
-                => !value.HasValue;
-
-            public static Boolean Equals(this Nullable<TimeSpan> value, TimeSpan otherValue)
-                => value.HasValue() && value.Equals(otherValue);
-
-            public static Boolean NotEquals(this Nullable<TimeSpan> value, TimeSpan otherValue)
-                => value.HasValue() && !value.Equals(otherValue);
-            #endregion Nullable
         }
     }
 }

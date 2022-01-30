@@ -1,64 +1,44 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
-namespace JasonPereira84.Helpers.UnitTests
+namespace JasonPereira84.Helpers.Tests
 {
     [TestClass]
     public class Test_Do
     {
         [TestMethod]
-        public void Nothing()
-        {
-            //struct
-            {
-                var source = Struct.From(0);
-                Do.Nothing(source);
-                Assert.AreEqual(0, source.Value);
-            }
-
-            //class
-            {
-                var source = Class.From(0);
-                Do.Nothing(source);
-                Assert.AreEqual(0, source.Value);
-            }
-        }
-
-        [TestMethod]
         public void NothingWith()
         {
-            //struct
-            {
-                var source = Struct.From(0);
-                var result = Do.NothingWith(source);
-                Assert.AreEqual(0, source.Value);
-            }
-
-            //class
-            {
-                var source = Class.From(0);
-                var result = Do.NothingWith(source);
-                Assert.AreEqual(0, source.Value);
-            }
+            var source = "hello";
+            Assert.AreSame(
+                expected: source,
+                actual: Do.NothingWith(source));
         }
 
         [TestMethod]
         public void Action()
         {
-            //struct
             {
-                var source = Struct.From(0);
-                var result = Do.Action(source, x => { x.Value+=1; return x.Value + 1; });
-                Assert.AreEqual(1, source.Value);
-                Assert.AreEqual(2, result);
+                var source = new SomeClass { Value = 1 };
+                Do.Action(source, x => { x.Value += 1; });
+                Assert.IsTrue(source.Value == 2);
             }
 
-            //class
             {
-                var source = Class.From(0);
-                var result = Do.Action(source, x => { x.Value += 1; return x.Value + 1; });
-                Assert.AreEqual(1, source.Value);
-                Assert.AreEqual(2, result);
+                {
+                    var source = new SomeClass { Value = 1 };
+                    var result = Do.Action(source, x => { x.Value += 1; return x; });
+                    Assert.AreSame(source, result);
+                    Assert.IsTrue(result.Value == 2);
+                }
+
+                {
+                    var source = new SomeClass { Value = 1 };
+                    var result = Do.Action(source, x => { return new OtherClass { Value = x.Value + 1 }; });
+                    Assert.IsTrue(result.Value == 2);
+                }
             }
         }
+
     }
 }
