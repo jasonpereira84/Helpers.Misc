@@ -12,60 +12,53 @@ namespace JasonPereira84.Helpers
     {
         public static partial class Misc
         {
-            public static Type IsEnum(this Type type, Boolean dontEnsure = false)
+            internal static Type isEnum(Type type)
             {
-                if (dontEnsure)
-                    return type?.IsEnum ?? false ? type : default(Type);
+                if (!type.IsEnum)
+                    throw new ArgumentException("Must be an Enumeration type");
 
-                Ensure.Argument.Is(type?.IsEnum ?? false, "T must be an Enumeration type");
                 return type;
             }
 
-            public static T GetEnumValue<T>(this String string_)
+            public static T GetEnumValue<T>(this String value)
                 where T : struct, IConvertible
-                => IsEnum(typeof(T))
+                => isEnum(typeof(T))
                     .Do(type =>
-                        Enum.TryParse(string_, true, out T val)
+                        Enum.TryParse(value, true, out T val)
                             ? val
                             : default(T));
-
-            public static T GetEnumValue<T>(this UInt64 intValue)
+            public static T GetEnumValue<T>(this UInt64 value)
                 where T : struct, IConvertible
-                => IsEnum(typeof(T))
-                    .Do(type => (T)Enum.ToObject(type, intValue));
-
-            public static T GetEnumValue<T>(this Int32 intValue)
+                => GetEnumValue<T>($"{value}");
+            public static T GetEnumValue<T>(this Int64 value)
                 where T : struct, IConvertible
-                => IsEnum(typeof(T))
-                    .Do(type => (T)Enum.ToObject(type, intValue));
+                => GetEnumValue<T>($"{value}");
+            public static T GetEnumValue<T>(this UInt32 value)
+                where T : struct, IConvertible 
+                => GetEnumValue<T>($"{value}");
+            public static T GetEnumValue<T>(this Int32 value)
+                where T : struct, IConvertible
+                => GetEnumValue<T>($"{value}");
 
             public static Array GetAllEnum(this Type type)
-                => Enum.GetValues(type);
-
+                => Enum.GetValues(isEnum(type));
             public static Array GetAllEnum(this Enum @enum)
-                => GetAllEnum(IsEnum(@enum.GetType()));
-
-            public static Array GetAllEnum<T>()
+                => GetAllEnum(@enum.GetType());
+            public static IEnumerable<T> GetAllEnum<T>()
                 where T : struct, IConvertible
-                => GetAllEnum(IsEnum(typeof(T)));
-
-            public static T[] GetAllEnum<T>(this Type type)
+                => GetAllEnum(typeof(T)).Cast<T>();
+            public static IEnumerable<T> GetAllEnum<T>(this Type type)
                 where T : struct, IConvertible
-                => (T[])type.GetAllEnum();
-
-            public static T[] GetAllEnum<T>(this T t)
+                => GetAllEnum<T>();
+            public static IEnumerable<T> GetAllEnum<T>(this T t)
                 where T : struct, IConvertible
-                => IsEnum(typeof(T)).GetAllEnum<T>();
+                => typeof(T).GetAllEnum<T>();
 
-            public static String GetDisplayName(this Type type, String enumString)
-                => IsEnum(type).GetMember(enumString)
-                        .FirstOrDefault()?
-                        .GetCustomAttribute<DisplayAttribute>(false)?
-                        .Name
-                    ?? enumString;
-
-            public static String GetDisplayName(this Enum @enum)
-                => GetDisplayName(IsEnum(@enum.GetType()), @enum.ToString());
+            public static String GetDisplayName(this Enum @enum, String defaultValue = default)
+                => @enum.GetType()
+                    .GetMember($"{@enum}")
+                    .FirstOrDefault()?
+                    .GetCustomAttribute<DisplayAttribute>(false)?.Name ?? defaultValue;
         }
     }
 }

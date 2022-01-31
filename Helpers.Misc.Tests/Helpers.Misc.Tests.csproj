@@ -1,13 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>JasonPereira84.Helpers.UnitTests</RootNamespace>
-    <AssemblyName>JasonPereira84.Helpers.Misc.UnitTests</AssemblyName>
+    <RootNamespace>JasonPereira84.Helpers.Tests</RootNamespace>
+    <AssemblyName>JasonPereira84.Helpers.Misc.Tests</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="If.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />

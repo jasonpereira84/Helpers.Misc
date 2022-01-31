@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,36 +10,49 @@ namespace JasonPereira84.Helpers
 
     public sealed class CompilationProperties : Pairs
     {
+        internal const String Unknown = "Unknown";
+        internal const String gitBranch = "gitBranch";
+        internal const String gitCommit = "gitCommit";
+        internal const String buildConfiguration = "buildConfiguration";
+
+        private static String sanitize(String value)
+            => String.IsNullOrWhiteSpace(value) ? Unknown : value.Trim();
+
         private readonly Dictionary<String, String> _dictionary;
 
-        private CompilationProperties(Dictionary dictionary)
-            => _dictionary = dictionary;
+        internal CompilationProperties(
+            String gitBranch,
+            String gitCommit,
+            String buildConfiguration)
+            => _dictionary = new Dictionary
+            {
+                { Constants.GitBranch, gitBranch },
+                { Constants.GitCommit, gitCommit },
+                { Constants.BuildConfiguration, buildConfiguration }
+            };
 
-        public CompilationProperties()
-            : this(
-                  new Dictionary {
-                      { Constants.GitBranch, "Unknown" },
-                      { Constants.GitCommit, "Unknown" },
-                      { Constants.BuildConfiguration, "Unknown" }
-                  })
+        public CompilationProperties() : this(
+            Unknown,
+            Unknown,
+            Unknown)
         { }
 
         public String GIT_BRANCH
         {
             get => _dictionary[Constants.GitBranch];
-            set => _dictionary[Constants.GitBranch] = _internalHelpers.SanitizeTo(value, "Unknown");
+            set => _dictionary[Constants.GitBranch] = sanitize(value);
         }
 
         public String GIT_COMMIT
         {
             get => _dictionary[Constants.GitCommit];
-            set => _dictionary[Constants.GitCommit] = _internalHelpers.SanitizeTo(value, "Unknown");
+            set => _dictionary[Constants.GitCommit] = sanitize(value);
         }
 
         public String BUILD_CONFIGURATION
         {
             get => _dictionary[Constants.BuildConfiguration];
-            set => _dictionary[Constants.BuildConfiguration] = _internalHelpers.SanitizeTo(value, "Unknown");
+            set => _dictionary[Constants.BuildConfiguration] = sanitize(value);
         }
 
         public IEnumerator<Pair> GetEnumerator()
