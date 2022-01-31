@@ -9,28 +9,13 @@ namespace JasonPereira84.Helpers
         public static partial class Misc
         {
             public static Boolean None<TSource>(this IEnumerable<TSource> source)
-                => _internalHelpers.None(source);
-
-            public static Boolean None<TSource>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate)
-                => _internalHelpers.None(source, predicate);
-
-            public static Boolean IsNullOrNone<TSource>(this IEnumerable<TSource> source)
-                => _internalHelpers.IsNullOrNone(source);
-
-            public static Boolean IsNullOrNone<TSource>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate)
-                => _internalHelpers.IsNullOrNone(source, predicate);
-
-            public static Boolean IsNotNullOrNone<TSource>(this IEnumerable<TSource> source)
-                => !IsNullOrNone(source);
-
-            public static Boolean IsNotNullOrNone<TSource>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate)
-                => !IsNullOrNone(source, predicate);
+                => !source.Any();
 
             public static IEnumerable<TResult> SelectWhen<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate, Func<TSource, TResult> selector)
-                => source?.Where(predicate)?.Select(selector);
+                => source.Where(predicate).Select(selector);
 
-            public static IEnumerable<TResult> SelectWhen<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate, Func<TSource, TResult> selector, out IEnumerable<TResult> sink)
-                => sink = SelectWhen(source, predicate, selector);
+            public static IEnumerable<TResult> SelectWhen<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate, Func<TSource, TResult> selector, out IEnumerable<TResult> result)
+                => result = SelectWhen(source, predicate, selector);
 
             public static Type GetItemType<TSource>(this IEnumerable<TSource> source)
                 => typeof(TSource);
@@ -65,20 +50,19 @@ namespace JasonPereira84.Helpers
                 return true;
             }
 
-            public static Boolean IsOneOf<TSource>(this TSource value, params TSource[] source)
-                => source.Contains(value);
-
-            public static Boolean IsNotOneOf<TSource>(this TSource value, params TSource[] source)
-                => !source.Contains(value);
-
+            public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, TSource defaultValue)
+                where TSource : class
+                => Enumerable.FirstOrDefault(source) ?? defaultValue;
             public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, Boolean> predicate, TSource defaultValue)
                 where TSource : class
-                => source.FirstOrDefault(predicate) ?? defaultValue;
-
+                => Enumerable.FirstOrDefault(source, predicate) ?? defaultValue;
+            public static Nullable<TSource> FirstOrDefault<TSource>(this IEnumerable<Nullable<TSource>> source, Nullable<TSource> defaultValue)
+                where TSource : struct
+                => Enumerable.FirstOrDefault(source) ?? defaultValue;
             public static Nullable<TSource> FirstOrDefault<TSource>(this IEnumerable<Nullable<TSource>> source, Func<Nullable<TSource>, Boolean> predicate, Nullable<TSource> defaultValue)
                 where TSource : struct
-                => source.FirstOrDefault(predicate) ?? defaultValue;
-            
+                => Enumerable.FirstOrDefault(source, predicate) ?? defaultValue;
+
             public static IEnumerable<TSource> Each<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
             {
                 foreach (var item in source)
@@ -94,46 +78,60 @@ namespace JasonPereira84.Helpers
                 return source;
             }
 
-            public static IEnumerable<TSource> Sanitize<TSource>(this IEnumerable<TSource> source)
-                => IsNotNullOrNone(source) ? source : Enumerable.Empty<TSource>();
-
-            public static IEnumerable<TSource> Sanitize<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource> sanitizer)
-                => Sanitize(source).Select(value => sanitizer.Invoke(value));
-
-            public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> source, params IEnumerable<TSource>[] sources)
+            public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> first, params IEnumerable<TSource>[] seconds)
             {
-                foreach (var src in sources)
-                    source = Enumerable.Concat(source, src);
-                return source;
+                foreach (var second in seconds)
+                    first = Enumerable.Concat(first, second);
+                return first;
             }
             public static IEnumerable<TSource> Concat<TSource>(params IEnumerable<TSource>[] sources)
                 => Concat(Enumerable.Empty<TSource>(), sources);
 
             public static String AsString<TSource>(this IEnumerable<TSource> source, String separator, Func<TSource, String> stringifier)
                 => String.Join(separator, source.Select(item => stringifier.Invoke(item)));
+            public static String AsString<TSource>(this IEnumerable<TSource> source, Func<TSource, String> stringifier)
+                => source.AsString(default(String), stringifier);
+            public static String AsString<TSource>(this IEnumerable<TSource> source, String separator)
+                => source.AsString(separator, x => $"{x}");
+            public static String AsString<TSource>(this IEnumerable<TSource> source)
+                => source.AsString(x => $"{x}");
 
-            public static IEnumerable<KeyValuePair<TKey, TElement>> AsKeyValuePairs<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> valueSelector)
-                => source.Select(item => new KeyValuePair<TKey, TElement>(keySelector.Invoke(item), valueSelector.Invoke(item)));
+            public static String AsString<TSource>(this IEnumerable<TSource> source, Char separator, Func<TSource, String> stringifier)
+                => String.Join(separator, source.Select(item => stringifier.Invoke(item)));
+            public static String AsString<TSource>(this IEnumerable<TSource> source, Char separator)
+                => source.AsString(separator, x => $"{x}");
 
             #region IEnumerable<String>
 
-            public static String AsString(this IEnumerable<String> source, String separator)
+#nullable enable
+            public static String AsString(this IEnumerable<String?> source, String separator)
                 => String.Join(separator, source);
+            public static String AsString(this IEnumerable<String?> source)
+                => String.Join(default(String), source);
+
+            public static String AsString(this IEnumerable<String?> source, Char separator)
+                => String.Join(separator, source);
+#nullable disable
 
             #endregion IEnumerable<String>
 
-            #region IEnumerable<KeyValuePair<Int32, String>>
+            #region IEnumerable<KeyValuePair<TKey, String>>
 
-            public static IEnumerable<KeyValuePair<Int32, String>> Sanitize(this IEnumerable<KeyValuePair<Int32, String>> source, Func<KeyValuePair<Int32, String>, Boolean> predicate)
-                => source.Where(set => predicate.Invoke(set));
+            public static IEnumerable<KeyValuePair<TKey, String>> Sanitize<TKey>(this IEnumerable<KeyValuePair<TKey, String>> source, Func<String, Boolean> predicate)
+                => source.Where(pair => predicate.Invoke(pair.Value));
+            public static IEnumerable<KeyValuePair<TKey, String>> Sanitize<TKey>(this IEnumerable<KeyValuePair<TKey, String>> source)
+                => source.Sanitize(value => value.IsNotNullOrEmptyOrWhiteSpace());
 
-            public static IEnumerable<KeyValuePair<Int32, String>> Sanitize(this IEnumerable<KeyValuePair<Int32, String>> source, Func<String, Boolean> predicate)
-                => Sanitize(source, set => predicate.Invoke(set.Value));
+            #endregion IEnumerable<KeyValuePair<TKey, String>>
 
-            public static IEnumerable<KeyValuePair<Int32, String>> Sanitize(this IEnumerable<KeyValuePair<Int32, String>> source)
-                => Sanitize(source, value => !_internalHelpers.IsNullOrEmptyOrWhiteSpace(value));
+            #region IEnumerable<KeyValuePair<String, TValue>>
 
-            #endregion IEnumerable<KeyValuePair<Int32, String>>
+            public static IEnumerable<KeyValuePair<String, TValue>> Sanitize<TValue>(this IEnumerable<KeyValuePair<String, TValue>> source, Func<String, Boolean> predicate)
+                => source.Where(pair => predicate.Invoke(pair.Key));
+            public static IEnumerable<KeyValuePair<String, TValue>> Sanitize<TValue>(this IEnumerable<KeyValuePair<String, TValue>> source)
+                => source.Sanitize(key => key.IsNotNullOrEmptyOrWhiteSpace());
+
+            #endregion IEnumerable<KeyValuePair<String, TValue>>
         }
     }
 }
