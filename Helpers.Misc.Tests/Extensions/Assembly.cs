@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace JasonPereira84.Helpers.Tests
+namespace JasonPereira84.Helpers.Misc.Tests
 {
     namespace Extensions
     {
@@ -28,22 +28,12 @@ namespace JasonPereira84.Helpers.Tests
             }
 
             [TestMethod]
-            public void GetAssemblyAttributes()
+            public void GetAttributes()
             {
                 Assert.IsTrue(
                     Assembly.Load(new AssemblyName("JasonPereira84.Helpers.Misc"))
-                    .GetAssemblyAttributes<AssemblyProductAttribute>()
+                    .GetAttributes<AssemblyProductAttribute>()
                     .Any());
-            }
-
-            [TestMethod]
-            public void GetAssemblyAttribute()
-            {
-                Assert.AreEqual(
-                    expected: "Helpers.Misc",
-                    actual: Assembly.Load(new AssemblyName("JasonPereira84.Helpers.Misc"))
-                        .GetAssemblyAttribute<AssemblyProductAttribute>()
-                        .Product);
             }
 
             [TestMethod]
@@ -59,6 +49,40 @@ namespace JasonPereira84.Helpers.Tests
                     expected: "Release",
                     actual: Assembly.Load(new AssemblyName("JasonPereira84.Helpers.Misc"))
                         .GetConfiguration("Unknown"));
+#endif
+            }
+
+            [TestMethod]
+            public void GetAppProperties()
+            {
+                var appProperties = Assembly.Load(
+                    new AssemblyName("JasonPereira84.Helpers.Misc"))
+                    .GetAppProperties();
+
+                Assert.AreEqual(
+                    expected: "JasonPereira84",
+                    actual: appProperties.Company);
+                Assert.AreEqual(
+                    expected: "Helpers.Misc",
+                    actual: appProperties.Product);
+                Assert.AreEqual(
+                    expected: "Copyright © 2019",
+                    actual: appProperties.Copyright);
+                Assert.IsTrue(appProperties.Version.Contains("."));
+                Assert.AreEqual(
+                    expected: "JasonPereira84's misc. helpers library",
+                    actual: appProperties.Title);
+                Assert.AreEqual(
+                    expected: "Misc. helper methods, properties, objects etc.",
+                    actual: appProperties.Description);
+#if DEBUG
+                Assert.AreEqual(
+                    expected: "Debug",
+                    actual: appProperties.Configuration);
+#else
+                Assert.AreEqual(
+                    expected: "Release",
+                    actual: appProperties.Configuration);
 #endif
             }
 
