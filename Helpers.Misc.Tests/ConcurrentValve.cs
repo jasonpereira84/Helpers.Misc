@@ -1,11 +1,7 @@
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace JasonPereira84.Helpers.Tests
+namespace JasonPereira84.Helpers.Misc.Tests
 {
     [TestClass]
     public class Test_ConcurrentValve

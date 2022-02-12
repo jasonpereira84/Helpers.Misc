@@ -10,13 +10,8 @@ namespace JasonPereira84.Helpers
 
     public sealed class CompilationProperties : Pairs
     {
-        internal const String Unknown = "Unknown";
-        internal const String gitBranch = "gitBranch";
-        internal const String gitCommit = "gitCommit";
-        internal const String buildConfiguration = "buildConfiguration";
-
         private static String sanitize(String value)
-            => String.IsNullOrWhiteSpace(value) ? Unknown : value.Trim();
+            => String.IsNullOrWhiteSpace(value) ? "?" : value.Trim();
 
         private readonly Dictionary<String, String> _dictionary;
 
@@ -32,9 +27,9 @@ namespace JasonPereira84.Helpers
             };
 
         public CompilationProperties() : this(
-            Unknown,
-            Unknown,
-            Unknown)
+            "?",
+            "?",
+            "?")
         { }
 
         public String GIT_BRANCH
