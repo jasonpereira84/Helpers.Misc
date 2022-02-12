@@ -65,9 +65,9 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 Assert.AreEqual(
                     expected: "Helpers.Misc",
                     actual: appProperties.Product);
-                Assert.AreEqual(
-                    expected: "Copyright © 2019",
-                    actual: appProperties.Copyright);
+                Assert.IsTrue(
+                    appProperties.Copyright.Contains("Copyright") &&
+                    appProperties.Copyright.Contains("2019"));
                 Assert.IsTrue(appProperties.Version.Contains("."));
                 Assert.AreEqual(
                     expected: "JasonPereira84's misc. helpers library",
