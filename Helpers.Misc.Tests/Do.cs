@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace JasonPereira84.Helpers.Tests
+namespace JasonPereira84.Helpers.Misc.Tests
 {
     [TestClass]
     public class Test_Do

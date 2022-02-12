@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace JasonPereira84.Helpers.Tests
+namespace JasonPereira84.Helpers.Misc.Tests
 {
     namespace Extensions
     {

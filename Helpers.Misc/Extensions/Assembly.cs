@@ -16,7 +16,7 @@ namespace JasonPereira84.Helpers
                 return assembly != null;
             }
 
-            public static T[] GetAssemblyAttributes<T>(this Assembly assembly)
+            public static T[] GetAttributes<T>(this Assembly assembly)
                 where T : Attribute
             {
                 // Get attributes of this type.
@@ -35,20 +35,41 @@ namespace JasonPereira84.Helpers
                 return retVal;
             }
 
-            public static T GetAssemblyAttribute<T>(this Assembly assembly)
+            public static Boolean TryGetAttribute<T>(this Assembly assembly, out T attribute)
                 where T : Attribute
-                => GetAssemblyAttributes<T>(assembly)[0];
+            {
+                try 
+                {
+                    attribute = GetAttributes<T>(assembly)[0];
+                    return true;
+                }
+                catch 
+                {
+                    attribute = default(T);
+                    return false;
+                }
+            }
 
             public static String GetConfiguration(this Assembly assembly, String defaultValue)
+                => TryGetAttribute(assembly, out AssemblyConfigurationAttribute attribute)
+                    ? SanitizeTo(attribute?.Configuration, defaultValue)
+                    : defaultValue;
+
+            public static AppProperties GetAppProperties(this Assembly assembly)
             {
-                AssemblyConfigurationAttribute _tryGet()
-                {
-                    var retVal = default(AssemblyConfigurationAttribute);
-                    try { retVal = GetAssemblyAttribute<AssemblyConfigurationAttribute>(assembly); }
-                    catch (Exception) { }
-                    return retVal;
-                }
-                return SanitizeTo(_tryGet()?.Configuration, defaultValue);
+                String _get<T>(Func<T, String> getter)
+                    where T : Attribute
+                    => !TryGetAttribute(assembly, out T attribute) ? "?"
+                        : SanitizeTo(getter.Invoke(attribute), "?");
+
+                return new AppProperties(
+                    _get<AssemblyCompanyAttribute>(attribute => attribute?.Company),
+                    _get<AssemblyProductAttribute>(attribute => attribute?.Product),
+                    _get<AssemblyCopyrightAttribute>(attribute => attribute?.Copyright),
+                    _get<AssemblyInformationalVersionAttribute>(attribute => attribute?.InformationalVersion),
+                    _get<AssemblyTitleAttribute>(attribute => attribute?.Title),
+                    _get<AssemblyDescriptionAttribute>(attribute => attribute?.Description),
+                    _get<AssemblyConfigurationAttribute>(attribute => attribute?.Configuration));
             }
 
         }

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace JasonPereira84.Helpers.Tests
+namespace JasonPereira84.Helpers.Misc.Tests
 {
     [TestClass]
     public class Test_CompilationProperties
@@ -12,29 +12,29 @@ namespace JasonPereira84.Helpers.Tests
             {
                 var compilationProperties = new CompilationProperties();
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_BRANCH);
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_COMMIT);
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.BUILD_CONFIGURATION);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 Assert.AreEqual(
-                    expected: CompilationProperties.gitBranch,
+                    expected: "gitBranch",
                     actual: compilationProperties.GIT_BRANCH);
                 Assert.AreEqual(
-                    expected: CompilationProperties.gitCommit,
+                    expected: "gitCommit",
                     actual: compilationProperties.GIT_COMMIT);
                 Assert.AreEqual(
-                    expected: CompilationProperties.buildConfiguration,
+                    expected: "buildConfiguration",
                     actual: compilationProperties.BUILD_CONFIGURATION);
             }
         }
@@ -44,42 +44,42 @@ namespace JasonPereira84.Helpers.Tests
         {
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_BRANCH = default;
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_BRANCH);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_BRANCH = "";
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_BRANCH);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_BRANCH = " ";
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_BRANCH);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_BRANCH = "x";
                 Assert.AreEqual(
                     expected: "x",
@@ -92,42 +92,42 @@ namespace JasonPereira84.Helpers.Tests
         {
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_COMMIT = default;
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_COMMIT);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_COMMIT = "";
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_COMMIT);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_COMMIT = " ";
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.GIT_COMMIT);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.GIT_COMMIT = "x";
                 Assert.AreEqual(
                     expected: "x",
@@ -140,42 +140,42 @@ namespace JasonPereira84.Helpers.Tests
         {
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.BUILD_CONFIGURATION = default;
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.BUILD_CONFIGURATION);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.BUILD_CONFIGURATION = "";
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.BUILD_CONFIGURATION);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.BUILD_CONFIGURATION = " ";
                 Assert.AreEqual(
-                    expected: CompilationProperties.Unknown,
+                    expected: "?",
                     actual: compilationProperties.BUILD_CONFIGURATION);
             }
 
             {
                 var compilationProperties = new CompilationProperties(
-                    CompilationProperties.gitBranch,
-                    CompilationProperties.gitCommit,
-                    CompilationProperties.buildConfiguration);
+                    "gitBranch",
+                    "gitCommit",
+                    "buildConfiguration");
                 compilationProperties.BUILD_CONFIGURATION = "x";
                 Assert.AreEqual(
                     expected: "x",
