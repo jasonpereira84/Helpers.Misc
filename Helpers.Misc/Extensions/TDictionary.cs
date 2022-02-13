@@ -90,31 +90,20 @@ namespace JasonPereira84.Helpers
                 where TDictionary : IDictionary<TKey, TValue>
                 => dictionary.AddIfNewOrUpdate(pairs.AsEnumerable());
 
+            #region TDictionary<String, TValue>
 
-            public static Boolean TryGetValueOrDefault<TKey, TValue, TDictionary>(this TDictionary dictionary, TKey key, out TValue value, TValue defaultValue = default(TValue))
-                where TDictionary : IDictionary<TKey, TValue>
+            public static Boolean ReallyTryGetValue<TValue, TDictionary>(this TDictionary dictionary, String key, out TValue value)
+                where TDictionary : IDictionary<String, TValue>
             {
                 if (dictionary.TryGetValue(key, out value))
                     return true;
 
-                value = defaultValue;
-                return false;
-            }
-
-
-            #region TDictionary<String, TValue>
-
-            public static Boolean ReallyTryGetValueOrDefault<TValue, TDictionary>(this TDictionary dictionary, String key, out TValue value, TValue defaultValue = default(TValue))
-                where TDictionary : IDictionary<String, TValue>
-            {
-                if (TryGetValueOrDefault(dictionary, key, out value, defaultValue))
-                    return true;
-
                 var actualKey = dictionary.Keys.FirstOrDefault(k => k.Matches(key));
                 if (actualKey.IsNotNull())
-                    if (TryGetValueOrDefault(dictionary, actualKey, out value, defaultValue))
+                    if (dictionary.TryGetValue(actualKey, out value))
                         return true;
 
+                value = default(TValue);
                 return false;
             }
 

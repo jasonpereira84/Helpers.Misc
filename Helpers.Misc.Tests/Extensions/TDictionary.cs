@@ -253,40 +253,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             }
 
             [TestMethod]
-            public void TryGetValueOrDefault()
-            {
-                var dictionary = new Dictionary<Int32, Int32>
-                {
-                    new KeyValuePair<Int32,Int32>(1, 1)
-                };
-
-                {
-                    var @bool = dictionary.TryGetValueOrDefault(1, out Int32 value);
-                    Assert.IsTrue(@bool);
-                    Assert.AreEqual(
-                        expected: 1,
-                        actual: value);
-                }
-
-                {
-                    var @bool = dictionary.TryGetValueOrDefault(2, out Int32 value);
-                    Assert.IsFalse(@bool);
-                    Assert.AreEqual(
-                        expected: default(Int32),
-                        actual: value);
-                }
-
-                {
-                    var @bool = dictionary.TryGetValueOrDefault(2, out Int32 value, 1);
-                    Assert.IsFalse(@bool);
-                    Assert.AreEqual(
-                        expected: 1,
-                        actual: value);
-                }
-            }
-
-            [TestMethod]
-            public void ReallyTryGetValueOrDefault()
+            public void ReallyTryGetValue()
             {
                 var dictionary = new Dictionary<String, Int32>
                 {
@@ -294,7 +261,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 };
 
                 {
-                    var @bool = dictionary.ReallyTryGetValueOrDefault("a", out Int32 value);
+                    var @bool = dictionary.ReallyTryGetValue("a", out Int32 value);
                     Assert.IsTrue(@bool);
                     Assert.AreEqual(
                         expected: 1,
@@ -302,7 +269,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 }
 
                 {
-                    var @bool = dictionary.ReallyTryGetValueOrDefault("b", out Int32 value);
+                    var @bool = dictionary.ReallyTryGetValue("b", out Int32 value);
                     Assert.IsFalse(@bool);
                     Assert.AreEqual(
                         expected: default(Int32),
@@ -310,15 +277,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 }
 
                 {
-                    var @bool = dictionary.ReallyTryGetValueOrDefault("b", out Int32 value, 1);
-                    Assert.IsFalse(@bool);
-                    Assert.AreEqual(
-                        expected: 1,
-                        actual: value);
-                }
-
-                {
-                    var @bool = dictionary.ReallyTryGetValueOrDefault("A", out Int32 value);
+                    var @bool = dictionary.ReallyTryGetValue("A", out Int32 value);
                     Assert.IsTrue(@bool);
                     Assert.AreEqual(
                         expected: 1,
@@ -326,20 +285,13 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 }
 
                 {
-                    var @bool = dictionary.ReallyTryGetValueOrDefault("B", out Int32 value);
+                    var @bool = dictionary.ReallyTryGetValue("aA", out Int32 value);
                     Assert.IsFalse(@bool);
                     Assert.AreEqual(
                         expected: default(Int32),
                         actual: value);
                 }
 
-                {
-                    var @bool = dictionary.ReallyTryGetValueOrDefault("B", out Int32 value, 1);
-                    Assert.IsFalse(@bool);
-                    Assert.AreEqual(
-                        expected: 1,
-                        actual: value);
-                }
             }
 
         }
