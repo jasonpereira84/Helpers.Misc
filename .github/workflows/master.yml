@@ -33,7 +33,4 @@ jobs:
         if-no-files-found: error
       
     - name: Publish package
-      run: dotnet nuget push BuildResults/*.nupkg -k oy2pd5qr23cmqsi7r24q3k3b7zsktoxurgqr6ta7mdicx4 -s https://api.nuget.org/v3/index.json
-
-    - name: Publish symbols
-      run: dotnet nuget push BuildResults/*.snupkg -k oy2pd5qr23cmqsi7r24q3k3b7zsktoxurgqr6ta7mdicx4 -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push BuildResults/*.nupkg -k ${{secrets.NUGET_APIKEY}} -s https://api.nuget.org/v3/index.json
