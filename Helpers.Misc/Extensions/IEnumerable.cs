@@ -132,6 +132,19 @@ namespace JasonPereira84.Helpers
                 => source.Sanitize(key => key.IsNotNullOrEmptyOrWhiteSpace());
 
             #endregion IEnumerable<KeyValuePair<String, TValue>>
+
+            public static void ForEachWithIndex<TSource>(this IEnumerable<TSource> source, Action<Int32, TSource> action)
+            {
+                if (source == null) throw new ArgumentNullException(nameof(source));
+                if (action == null) throw new ArgumentNullException(nameof(action));
+
+                var index = 0;
+                foreach (TSource item in source)
+                {
+                    action(index, item);
+                    index++;
+                }
+            }
         }
     }
 }
