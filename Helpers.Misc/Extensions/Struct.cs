@@ -14,6 +14,10 @@ namespace JasonPereira84.Helpers
             public static Boolean NotHasValue<T>(this Nullable<T> value)
                 where T : struct 
                 => !value.HasValue;
+
+            public static Boolean NotEquals<T>(this Nullable<T> value, T otherValue)
+                where T : struct
+                => !value.Equals(otherValue);
             #endregion Nullable
         }
     }

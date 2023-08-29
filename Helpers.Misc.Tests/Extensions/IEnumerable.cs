@@ -329,6 +329,51 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
             }
 
+            [TestMethod]
+            public void ForEachWithIndex()
+            {
+                {
+                    var source = default(Int32[]);
+
+                    Assert.ThrowsException<ArgumentNullException>(() => 
+                    {
+                        var result_index = new List<Int32>();
+                        var result_item = new List<Int32>();
+                        source.ForEachWithIndex((index, item) =>
+                        {
+                            result_index.Add(index);
+                            result_item.Add(item);
+                        });
+                    });
+                }
+
+                {
+                    var source = new[] { 1, 2, 3 };
+
+                    Assert.ThrowsException<ArgumentNullException>(() =>
+                    {
+                        var result_index = new List<Int32>();
+                        var result_item = new List<Int32>();
+                        source.ForEachWithIndex(default);
+                    });
+                }
+
+                {
+                    var source = new[] { 1, 2, 3 };
+
+                    var result_index = new List<Int32>();
+                    var result_item = new List<Int32>();
+                    source.ForEachWithIndex((index, item) =>
+                    {
+                        result_index.Add(index);
+                        result_item.Add(item);
+                    });
+
+                    Assert.IsTrue(result_index.Count == 3);
+                    Assert.IsTrue(result_item.Count == 3);
+                }
+
+            }
         }
     }
 }
