@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Configuration>'$(Configuration)'</Configuration>
     <FileVersion>1.0.0.0</FileVersion>
     <OutputType>Library</OutputType>
@@ -27,7 +27,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Authors>jasonpereira84@gmail.com</Authors>
-    <Version>6.0.1</Version>
+    <Version>8.0.0</Version>
 
   </PropertyGroup>
 
@@ -46,7 +46,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

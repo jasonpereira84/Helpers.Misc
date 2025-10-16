@@ -29,7 +29,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var type = default(Type);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => type.GetPublicProperties());
                     }
 

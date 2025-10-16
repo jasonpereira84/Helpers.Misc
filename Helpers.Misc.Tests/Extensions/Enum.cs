@@ -18,7 +18,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 Assert.IsNotNull(
                     Misc.isEnum(typeof(DayOfWeek)));
 
-                Assert.ThrowsException<ArgumentException>(
+                Assert.Throws<ArgumentException>(
                     () => Misc.isEnum(typeof(Int32)));
             }
 

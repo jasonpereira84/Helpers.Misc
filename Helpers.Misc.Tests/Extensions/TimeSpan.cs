@@ -144,7 +144,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    Assert.Throws<ArgumentOutOfRangeException>(
                         () => 0UL.RemainingTimeSpan(1));
                 }
 
