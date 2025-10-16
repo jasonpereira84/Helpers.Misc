@@ -10,17 +10,17 @@ namespace JasonPereira84.Helpers.Misc.Tests
         public void From()
         {
             {
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => SanePerson.From(default, value => value, value => value));
             }
 
             {
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => SanePerson.From(new Person(), default, value => value));
             }
 
             {
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => SanePerson.From(new Person(), value => value, default));
             }
 
