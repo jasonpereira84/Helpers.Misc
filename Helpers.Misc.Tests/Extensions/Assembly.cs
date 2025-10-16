@@ -68,7 +68,9 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 Assert.IsTrue(
                     appProperties.Copyright.Contains("Copyright") &&
                     appProperties.Copyright.Contains("2019"));
+#pragma warning disable MSTEST0037
                 Assert.IsTrue(appProperties.Version.Contains("."));
+#pragma warning restore MSTEST0037
                 Assert.AreEqual(
                     expected: "JasonPereira84's misc. helpers library",
                     actual: appProperties.Title);

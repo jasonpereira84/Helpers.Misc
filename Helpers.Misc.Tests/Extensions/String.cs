@@ -35,7 +35,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             {
                 {
                     var @string = default(String);
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => @string.IsEmpty());
                 }
 
@@ -65,7 +65,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             {
                 {
                     var @string = default(String);
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => @string.IsWhiteSpace());
                 }
 
@@ -119,7 +119,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             {
                 {
                     var @string = default(String);
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => @string.IsWhiteSpace());
                 }
 
@@ -201,7 +201,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 {
                     {
                         var @string = "hello ";
-                        Assert.ThrowsException<ArgumentOutOfRangeException>(
+                        Assert.Throws<ArgumentOutOfRangeException>(
                             () => @string.EvaluateSanity(default(String), out String dump));
                     }
 
@@ -262,19 +262,19 @@ namespace JasonPereira84.Helpers.Misc.Tests
             {
                 {
                     var @string = default(String);
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => @string.Mask(0, 10));
                 }
 
                 {
                     var @string = String.Empty;
-                    Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    Assert.Throws<ArgumentOutOfRangeException>(
                         () => @string.Mask(0, 10));
                 }
 
                 {
                     var @string = "";
-                    Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    Assert.Throws<ArgumentOutOfRangeException>(
                         () => @string.Mask(0, 10));
                 }
 
@@ -671,7 +671,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     {
                         retVal = false;
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfEmpty(action));
                     }
 
@@ -711,7 +711,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfEmpty(func));
                     }
 
@@ -759,7 +759,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     {
                         retVal = false;
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfNotEmpty(action));
                     }
 
@@ -799,7 +799,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfNotEmpty(func));
                     }
 
@@ -847,7 +847,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     {
                         retVal = false;
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfWhiteSpace(action));
                     }
 
@@ -887,7 +887,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfWhiteSpace(func));
                     }
 
@@ -935,7 +935,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     {
                         retVal = false;
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfNotWhiteSpace(action));
                     }
 
@@ -975,7 +975,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfNotWhiteSpace(func));
                     }
 
@@ -1201,7 +1201,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     {
                         retVal = false;
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfEmptyOrWhiteSpace(action));
                     }
 
@@ -1241,7 +1241,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfEmptyOrWhiteSpace(func));
                     }
 
@@ -1289,7 +1289,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     {
                         retVal = false;
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfNotEmptyOrWhiteSpace(action));
                     }
 
@@ -1329,7 +1329,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                     {
                         var @string = default(String);
-                        Assert.ThrowsException<ArgumentNullException>(
+                        Assert.Throws<ArgumentNullException>(
                             () => @string.IfNotEmptyOrWhiteSpace(func));
                     }
 

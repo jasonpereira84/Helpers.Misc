@@ -18,7 +18,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             {
                 {
                     var source = default(NameValueCollection);
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => source.AsPairs());
                 }
 

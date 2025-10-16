@@ -40,7 +40,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 {
                     {
                         var year = (UInt16)0;
-                        Assert.ThrowsException<ArgumentOutOfRangeException>(
+                        Assert.Throws<ArgumentOutOfRangeException>(
                             () => year.FirstDayOfMonth(MonthsOfYear.January, DateTimeKind.Utc));
                     }
 
@@ -54,7 +54,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
 
                 {
                     {
-                        Assert.ThrowsException<ArgumentOutOfRangeException>(
+                        Assert.Throws<ArgumentOutOfRangeException>(
                             () => MonthsOfYear.January.FirstDayOfMonth(0));
                     }
 
@@ -70,7 +70,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             [TestMethod]
             public void FirstDayOfWeekOfMonth()
             {
-                Assert.ThrowsException<ArgumentOutOfRangeException>(
+                Assert.Throws<ArgumentOutOfRangeException>(
                     () => MonthsOfYear.January.FirstDayOfWeekOfMonth(0, DayOfWeek.Sunday));
 
                 Assert.AreEqual(
@@ -99,7 +99,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             [TestMethod]
             public void LastDayOfWeekOfMonth()
             {
-                Assert.ThrowsException<ArgumentOutOfRangeException>(
+                Assert.Throws<ArgumentOutOfRangeException>(
                     () => MonthsOfYear.January.LastDayOfWeekOfMonth(0, DayOfWeek.Sunday));
 
                 Assert.AreEqual(
@@ -128,7 +128,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             [TestMethod]
             public void DayOfMonth()
             {
-                Assert.ThrowsException<ArgumentOutOfRangeException>(
+                Assert.Throws<ArgumentOutOfRangeException>(
                     () => MonthsOfYear.January.DayOfMonth(0, WeekOfMonth.First, DayOfWeek.Sunday));
 
                 Assert.AreEqual(
@@ -139,7 +139,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                     expected: 28,
                     actual: MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.Fourth, DayOfWeek.Monday).Day);
 
-                Assert.ThrowsException<DateNotFoundException>(
+                Assert.Throws<DateNotFoundException>(
                     () => MonthsOfYear.January.DayOfMonth(2019, WeekOfMonth.Fifth, DayOfWeek.Monday));
                 Assert.AreEqual(
                     expected: 28,
@@ -155,7 +155,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
             {
                 {
                     var year = (UInt16)0;
-                    Assert.ThrowsException<ArgumentOutOfRangeException>(
+                    Assert.Throws<ArgumentOutOfRangeException>(
                         () => year.DayOfYear(WeekOfYear.First, DayOfWeek.Sunday));
                 }
 
@@ -170,7 +170,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                         expected: 31,
                         actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Tuesday).Day);
 
-                    Assert.ThrowsException<DateNotFoundException>(
+                    Assert.Throws<DateNotFoundException>(
                         () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Wednesday));
                     Assert.AreEqual(
                         expected: 25,
@@ -188,7 +188,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                         expected: 31,
                         actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Monday).Day);
 
-                    Assert.ThrowsException<DateNotFoundException>(
+                    Assert.Throws<DateNotFoundException>(
                         () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Tuesday));
                     Assert.AreEqual(
                         expected: 25,
@@ -206,7 +206,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                         expected: 31,
                         actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Sunday).Day);
 
-                    Assert.ThrowsException<DateNotFoundException>(
+                    Assert.Throws<DateNotFoundException>(
                         () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Monday));
                     Assert.AreEqual(
                         expected: 25,
@@ -240,7 +240,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                         expected: 31,
                         actual: year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Thursday).Day);
 
-                    Assert.ThrowsException<DateNotFoundException>(
+                    Assert.Throws<DateNotFoundException>(
                         () => year.DayOfYear(WeekOfYear.FiftyThird, DayOfWeek.Friday));
                     Assert.AreEqual(
                         expected: 25,

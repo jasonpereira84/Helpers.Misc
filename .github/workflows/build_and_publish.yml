@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
 
     - name: Get configuration
       run: |
@@ -23,9 +23,9 @@ jobs:
         fi
     
     - name: Setup framework
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
         
     - name: Install dependencies
       run: dotnet restore
@@ -37,7 +37,7 @@ jobs:
       run: dotnet test --configuration ${{ env.cfg }} --no-restore --verbosity Normal
 
     - name: Upload artifact 
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         path: BuildResults
         if-no-files-found: error

@@ -335,7 +335,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 {
                     var source = default(Int32[]);
 
-                    Assert.ThrowsException<ArgumentNullException>(() => 
+                    Assert.Throws<ArgumentNullException>(() => 
                     {
                         var result_index = new List<Int32>();
                         var result_item = new List<Int32>();
@@ -350,7 +350,7 @@ namespace JasonPereira84.Helpers.Misc.Tests
                 {
                     var source = new[] { 1, 2, 3 };
 
-                    Assert.ThrowsException<ArgumentNullException>(() =>
+                    Assert.Throws<ArgumentNullException>(() =>
                     {
                         var result_index = new List<Int32>();
                         var result_item = new List<Int32>();
