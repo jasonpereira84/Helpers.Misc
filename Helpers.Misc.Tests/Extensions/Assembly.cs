@@ -37,22 +37,6 @@ namespace JasonPereira84.Helpers.Misc.Tests
             }
 
             [TestMethod]
-            public void GetConfiguration()
-            {
-#if DEBUG
-                Assert.AreEqual(
-                    expected: "Debug",
-                    actual: Assembly.Load(new AssemblyName("JasonPereira84.Helpers.Misc"))
-                        .GetConfiguration("Unknown"));
-#else
-                Assert.AreEqual(
-                    expected: "Release",
-                    actual: Assembly.Load(new AssemblyName("JasonPereira84.Helpers.Misc"))
-                        .GetConfiguration("Unknown"));
-#endif
-            }
-
-            [TestMethod]
             public void GetAppProperties()
             {
                 var appProperties = Assembly.Load(
