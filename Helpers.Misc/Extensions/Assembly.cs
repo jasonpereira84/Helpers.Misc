@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace JasonPereira84.Helpers
@@ -50,11 +51,6 @@ namespace JasonPereira84.Helpers
                 }
             }
 
-            public static String GetConfiguration(this Assembly assembly, String defaultValue)
-                => TryGetAttribute(assembly, out AssemblyConfigurationAttribute attribute)
-                    ? SanitizeTo(attribute?.Configuration, defaultValue)
-                    : defaultValue;
-
             public static AppProperties GetAppProperties(this Assembly assembly)
             {
                 String _get<T>(Func<T, String> getter)
@@ -70,6 +66,21 @@ namespace JasonPereira84.Helpers
                     _get<AssemblyTitleAttribute>(attribute => attribute?.Title),
                     _get<AssemblyDescriptionAttribute>(attribute => attribute?.Description),
                     _get<AssemblyConfigurationAttribute>(attribute => attribute?.Configuration));
+            }
+
+            public static CompilationProperties GetCompilationProperties(this Assembly assembly)
+            {
+                var customAttributes = assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
+                    .ToDictionary(
+                        keySelector: x => x.Key,
+                        elementSelector: x => x.Value);
+
+                return new CompilationProperties
+                {
+                    GIT_BRANCH = customAttributes.ValueOrDefault("GitBranch", "no-GitBranch-attribute-found"),
+                    GIT_COMMIT = customAttributes.ValueOrDefault("GitCommit", "no-GitCommit-attribute-found"),
+                    BUILD_CONFIGURATION = customAttributes.ValueOrDefault("BuildConfiguration", "no-BuildConfiguration-attribute-found")
+                };
             }
 
         }
